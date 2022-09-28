@@ -1,0 +1,31 @@
+@import './vars';
+
+@mixin point-before {
+	&:before {
+		content: '';
+		display: inline-block;
+		width: 10px;
+		height: 10px;
+		border-radius: 10px;
+		margin-right: 10px;
+		@content;
+	}
+}
+
+@mixin blue-point-before {
+	@include point-before {
+		background-color: $color-blue;
+	}
+}
+
+@mixin orange-point-before {
+	@include point-before {
+		background-color: $color-orange;
+	}
+}
+
+@mixin green-point-before {
+	@include point-before {
+		background-color: $color-green;
+	}
+}

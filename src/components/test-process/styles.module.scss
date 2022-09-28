@@ -1,0 +1,57 @@
+@import '@/styles/vars';
+@import '@/styles/mixins';
+
+.root {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+
+	.centeredText {
+		text-align: center;
+	}
+
+	.answersContainer {
+		flex-grow: 1;
+
+		.answers {
+			margin: 0 -10px;
+
+			.answerContainer {
+				flex: 0 0 50%;
+				margin-bottom: 20px;
+				padding: 0 10px;
+
+				.answer {
+					flex: 0 0 50%;
+					padding: 10px;
+					display: flex;
+					align-items: center;
+					cursor: pointer;
+
+					.text {
+						display: inline-block;
+						max-width: 250px;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+					}
+
+					@include point-before;
+
+					&.active {
+						@include blue-point-before;
+					}
+				}
+			}
+		}
+	}
+
+	.button {
+		flex: 1;
+		padding: 10px 0;
+
+		&:first-child {
+			margin-right: 20px;
+		}
+	}
+}

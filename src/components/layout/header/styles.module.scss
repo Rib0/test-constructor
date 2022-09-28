@@ -1,0 +1,16 @@
+.icon {
+	margin-right: 10px;
+}
+
+.link {
+	margin-right: 20px;
+	flex-grow: 1;
+}
+
+.pages {
+	flex-grow: 1;
+
+	.label {
+		padding: 0 5px;
+	}
+}

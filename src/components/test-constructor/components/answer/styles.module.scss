@@ -1,0 +1,39 @@
+@import '@/styles/vars';
+@import '@/styles/mixins';
+
+.answerContainer {
+	flex: 0 0 50%;
+	margin-bottom: 20px;
+	padding: 0 10px;
+
+	.answer {
+		flex: 0 0 50%;
+		padding: 5px 10px;
+		display: flex;
+		align-items: center;
+
+		.text {
+			display: inline-block;
+			max-width: 250px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.actions {
+			flex-grow: 1;
+			display: flex;
+			justify-content: flex-end;
+
+			.button {
+				margin-right: 5px;
+			}
+		}
+
+		@include blue-point-before;
+
+		&.editing {
+			@include orange-point-before;
+		}
+	}
+}

@@ -1,0 +1,25 @@
+@import '@/styles/vars';
+
+.accordionSummary {
+	height: 80px;
+
+	.questionText {
+		flex-grow: 1;
+		display: flex;
+		align-items: center;
+	}
+
+	.questionActions {
+		margin: 0 20px;
+		display: flex;
+		align-items: center;
+
+		.button {
+			margin-right: 5px;
+		}
+	}
+}
+
+.addActions {
+	align-items: flex-start;
+}

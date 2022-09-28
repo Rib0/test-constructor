@@ -1,0 +1,59 @@
+@import '@/styles/vars';
+
+.listItem {
+	cursor: pointer;
+	overflow: hidden;
+	position: relative;
+
+	&:hover,
+	&:active {
+		.listItemIcon {
+			transform: translateX(0);
+		}
+	}
+
+	.background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		transform: translateY(100%);
+		transition: transform linear 0.2s;
+		background-color: $color-black-gray;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.button {
+			margin-right: 15px;
+		}
+	}
+
+	&.active {
+		.background {
+			transform: translateY(0);
+		}
+	}
+
+	.listItemIcon {
+		transform: translateX(-50px);
+		min-width: auto;
+		margin-right: 15px;
+		transition: transform 0.225s;
+	}
+
+	.textPrimary {
+		font-weight: bold;
+	}
+
+	.info {
+		margin: 0 -3px;
+
+		.passesAmount {
+			display: flex;
+			align-items: center;
+		}
+	}
+}
