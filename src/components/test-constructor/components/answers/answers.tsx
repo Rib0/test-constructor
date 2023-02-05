@@ -10,7 +10,8 @@ import { nanoid } from 'nanoid';
 import { useSettingsContext } from '@/context/settings-context';
 import Answer from '../answer';
 import Select from '@/components/common/select';
-import { Question, Answer as AnswerType, TestSettingsClient } from '@/types';
+import { TestSettingsClient } from '@/types/client';
+import { Question, Answer as AnswerType } from '@/types/server';
 
 import styles from './styles.module.scss';
 
@@ -20,7 +21,7 @@ interface Props {
 }
 
 const WEIGHT_OPTIONS = Array.from({ length: 3 }, (_, index) => ({
-	value: String(index + 1),
+	value: index + 1,
 	label: String(index + 1),
 }));
 const [{ value: DEFAULT_WEIGHT }] = WEIGHT_OPTIONS;
@@ -52,7 +53,7 @@ const Answers: React.FC<Props> = ({ onEditQuestion, question }) => {
 		setAnswerText(e.target.value);
 	};
 
-	const handleChangeAnswerWeight = (value: string) => {
+	const handleChangeAnswerWeight = (value: number) => {
 		setAnswerWeight(value);
 	};
 
@@ -94,7 +95,7 @@ const Answers: React.FC<Props> = ({ onEditQuestion, question }) => {
 		handleSaveAnswer();
 	};
 
-	const handleCancelEditAnswer = ({ text, weight, targetResult }: AnswerType) => {
+	const handleCancelEditAnswer = ({ text, weight }: AnswerType) => {
 		setAnswerText(text);
 		setAnswerWeight(weight);
 		setEditingAnswerId(null);

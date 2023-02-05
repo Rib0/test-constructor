@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState, useEffect } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
@@ -6,7 +6,9 @@ import Button from '@mui/material/Button';
 import cx from 'classnames';
 
 import TestResults from '@/components/test-results';
-import { TestItem } from '@/types';
+import { addDocument, incrementDocValue } from '@/lib/front';
+import { useSnackbarContext } from '@/context/snackbar-context';
+import { DbCollections, TestItem } from '@/types/server';
 
 import styles from './styles.module.scss';
 
@@ -15,6 +17,7 @@ interface Props {
 }
 
 const TestProcess: React.FC<Props> = ({ test }) => {
+	const snackbarContext = useSnackbarContext();
 	const [questionIndex, setQuestionIndex] = useState(0);
 	const [answers, setAnswers] = useState<Record<string, string>>({});
 	const [loading, setLoading] = useState(false); // TODO: добавить отправку на сервер и возмодность ошибки
@@ -22,11 +25,24 @@ const TestProcess: React.FC<Props> = ({ test }) => {
 	const { name, questions } = test;
 	const currentQuestion = questions[questionIndex];
 
-	useEffect(() => {
-		if (!currentQuestion) {
-			// TODO: отправка результатов на сервер
+	const activeAnswer = answers[currentQuestion?.id];
+	const isLastQuestion = questionIndex + 1 === questions.length;
+
+	const trySendTestResults = async () => {
+		setLoading(true);
+		try {
+			await addDocument(answers, DbCollections.testsResults);
+			await incrementDocValue(DbCollections.tests, test.id, 'passesAmount');
+		} catch (e) {
+			snackbarContext.showErrorSnackbar({
+				text: 'Произошла ошибка во время сохранения результатов, попробуйте еще раз',
+				autoHideDuration: 3000,
+			});
+			throw new Error(e.message);
+		} finally {
+			setLoading(false);
 		}
-	}, [currentQuestion]);
+	};
 
 	const handleSetActiveAnswer = (e: SyntheticEvent<HTMLDivElement>) => {
 		if (!(e.target instanceof HTMLDivElement)) {
@@ -43,22 +59,24 @@ const TestProcess: React.FC<Props> = ({ test }) => {
 		setQuestionIndex(questionIndex - 1);
 	};
 
-	const handleGoNextQuestion = () => {
+	const handleGoNextQuestion = async () => {
+		if (isLastQuestion) {
+			try {
+				await trySendTestResults();
+				setQuestionIndex(questionIndex + 1);
+			} catch (e) {
+				return;
+			}
+		}
+
 		setQuestionIndex(questionIndex + 1);
 	};
-
-	if (loading) {
-		return <div>loading...</div>;
-	}
 
 	if (!currentQuestion)
 		return (
 			// TODO: расчитать результат и показывать его если включена галочка
-			<TestResults />
+			<TestResults testId={test.id} />
 		);
-
-	const activeAnswer = answers[currentQuestion.id];
-	const isLastQuestion = questionIndex + 1 === questions.length;
 
 	return (
 		<Stack className={styles.root} spacing={3}>
@@ -100,7 +118,7 @@ const TestProcess: React.FC<Props> = ({ test }) => {
 					Назад
 				</Button>
 				<Button
-					disabled={!activeAnswer}
+					disabled={!activeAnswer || loading}
 					onClick={handleGoNextQuestion}
 					variant="contained"
 					className={styles.button}

@@ -7,7 +7,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { nanoid } from 'nanoid';
 
 import Question from '../question';
-import { Question as QuestionType } from '@/types';
+import { Question as QuestionType } from '@/types/server';
 import { HandleChange } from '@/components/test-constructor/utils';
 import { useSettingsContext } from '@/context/settings-context';
 

@@ -9,7 +9,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 
 import Answers from '../answers';
 import EditButton from '@/components/common/edit-button';
-import { Question } from '@/types';
+import { Question } from '@/types/server';
 
 import styles from './styles.module.scss';
 

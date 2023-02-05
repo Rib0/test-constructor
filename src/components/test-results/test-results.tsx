@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 import StarsScore from '@/components/stars-score';
+import { incrementDocValue } from '@/lib/front';
 import { Paths } from '@/constants';
+import { DbCollections } from '@/types/server';
 
 import styles from './styles.module.scss';
 
-const RankTest: React.FC = () => {
+interface Props {
+	testId: string;
+}
+
+const RankTest: React.FC<Props> = ({ testId }) => {
 	const router = useRouter();
 	const [score, setScore] = useState(0);
 
@@ -19,7 +25,6 @@ const RankTest: React.FC = () => {
 
 	const handleFinish = async () => {
 		if (score) {
-			// TODO: отправить оценку на сервер
 		}
 
 		router.push(Paths.home);

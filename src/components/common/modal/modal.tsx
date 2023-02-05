@@ -15,6 +15,7 @@ interface Props {
 	declineButtonText?: string;
 	onAccept: VoidFunction;
 	onDecline?: VoidFunction;
+	acceptButtonDisabled?: boolean;
 }
 
 const Modal: React.FC<PropsWithChildren<Props>> = ({
@@ -24,6 +25,7 @@ const Modal: React.FC<PropsWithChildren<Props>> = ({
 	declineButtonText = 'Закрыть',
 	onAccept,
 	onDecline,
+	acceptButtonDisabled,
 	children,
 }) => (
 	<MuiDialog open={visible} onClose={onDecline} transitionDuration={{ exit: 0, enter: 225 }}>
@@ -32,7 +34,7 @@ const Modal: React.FC<PropsWithChildren<Props>> = ({
 			<DialogContentText>{children}</DialogContentText>
 		</DialogContent>
 		<DialogActions>
-			<Button onClick={onAccept} autoFocus>
+			<Button onClick={onAccept} disabled={acceptButtonDisabled} autoFocus>
 				{acceptButtonText}
 			</Button>
 			{onDecline && <Button onClick={onDecline}>{declineButtonText}</Button>}

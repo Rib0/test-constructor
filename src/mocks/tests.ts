@@ -1,4 +1,4 @@
-import { TestItem } from '@/types';
+import { TestItem } from '@/types/server';
 
 const firstResultId = Math.random().toString();
 const secondResultId = Math.random().toString();
@@ -20,13 +20,13 @@ export default Array.from(
 					{
 						id: '1',
 						text: 'Макароны',
-						weight: '1',
+						weight: 1,
 						targetResult: firstResultId,
 					},
 					{
 						id: '2',
 						text: 'Рис',
-						weight: '2',
+						weight: 2,
 						targetResult: secondResultId,
 					},
 				],
@@ -38,13 +38,13 @@ export default Array.from(
 					{
 						id: '1',
 						text: 'Кошка',
-						weight: '3',
+						weight: 3,
 						targetResult: secondResultId,
 					},
 					{
 						id: '2',
 						text: 'Собака',
-						weight: '1',
+						weight: 1,
 						targetResult: firstResultId,
 					},
 				],

@@ -7,33 +7,39 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import SaveIcon from '@mui/icons-material/Save';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import copy from 'copy-to-clipboard';
 
 import { SettingsContext } from '@/context/settings-context';
+import { useSnackbarContext } from '@/context/snackbar-context';
+import { useAuthContext } from '@/context/auth-context';
 import TabView from '@/components/common/tab-view';
-import Snackbar from '@/components/common/snackbar';
 import CommonSettings from './components/common-settings';
 import Questions from './components/questions';
 import Results from './components/results';
+import { mapTestSettingsToServerData } from '@/components/test-constructor/utils';
 import {
 	HandleChange,
 	HandleChangeCommon,
-	mapServerTestSettingsData,
+	mapTestSettingsToClientData,
 	TEST_SAVE_RESULTS,
 	validateTestSettings,
 } from './utils';
-
-import { TestSettingsClient, TestItem } from '@/types';
+import { addDocument, editDocument } from '@/lib/front';
+import { TestSettingsClient } from '@/types/client';
+import { TestItem, DbCollections } from '@/types/server';
 
 interface Props {
 	initialValues?: TestItem;
 }
 
 const TestConstructor: React.FC<Props> = ({ initialValues }) => {
+	const auth = useAuthContext();
+	const snackbarContext = useSnackbarContext();
 	const [visibleTab, setVisibleTab] = useState(0);
 	const [testSettings, setTestSettings] = useState<TestSettingsClient>(() =>
-		mapServerTestSettingsData(initialValues)
+		mapTestSettingsToClientData(initialValues)
 	);
-	const [saved, setSaved] = useState<'success' | 'error'>();
+	const [saveLoading, setSaveLoading] = useState(false);
 
 	const handleChangeTab: TabsProps['onChange'] = (_, value) => {
 		setVisibleTab(value);
@@ -50,23 +56,58 @@ const TestConstructor: React.FC<Props> = ({ initialValues }) => {
 		handleChange('common', { ...testSettings.common, [name]: value });
 	};
 
-	const handleSaveTest = () => {
+	const handleResetSettings = () => {
 		const isEdit = Boolean(initialValues);
-		// TODO: запрос на сохранение теста
-		setSaved('success');
+		setVisibleTab(0);
+		if (!isEdit) {
+			setTestSettings(mapTestSettingsToClientData());
+		}
 	};
 
-	const handleCloseSnackBar = () => {
-		setSaved(undefined);
+	const getSnackbarAction = (link: string) => {
+		return (
+			<IconButton
+				size="medium"
+				onClick={() => {
+					copy(link);
+					snackbarContext.handleChange({ open: false });
+				}}
+			>
+				<ContentCopyIcon />
+			</IconButton>
+		);
 	};
 
-	const snackBarAction = (
-		<IconButton size="medium" onClick={handleCloseSnackBar}>
-			<ContentCopyIcon />
-		</IconButton>
-	);
+	const handleSaveTest = async () => {
+		const isEdit = Boolean(initialValues);
+		const data = mapTestSettingsToServerData({ ...testSettings, userId: auth?.id! });
+		setSaveLoading(true);
+
+		try {
+			if (isEdit) {
+				await editDocument(data, DbCollections.tests, testSettings.id!);
+			} else {
+				await addDocument(data, DbCollections.tests);
+			}
+			const link = `${window.location.host}/tests/${testSettings.id!}`;
+			snackbarContext.showSuccessSnackbar({
+				text: TEST_SAVE_RESULTS['success'],
+				action: getSnackbarAction(link),
+			});
+			handleResetSettings();
+		} catch (e) {
+			snackbarContext.showErrorSnackbar({
+				text: TEST_SAVE_RESULTS['error'],
+			});
+		} finally {
+			setSaveLoading(false);
+		}
+	};
 
 	const validationMessage = useMemo(() => validateTestSettings(testSettings), [testSettings]);
+	const isSaveButtonDisabled = Boolean(validationMessage) || saveLoading;
+
+	console.log(auth);
 
 	return (
 		<Stack direction="column" spacing={3}>
@@ -78,7 +119,7 @@ const TestConstructor: React.FC<Props> = ({ initialValues }) => {
 			<Stack spacing={1} direction="column">
 				<Stack direction="row">
 					<Button
-						disabled={Boolean(validationMessage)}
+						disabled={isSaveButtonDisabled}
 						variant="contained"
 						startIcon={<SaveIcon />}
 						onClick={handleSaveTest}
@@ -97,15 +138,6 @@ const TestConstructor: React.FC<Props> = ({ initialValues }) => {
 					<Results onChange={handleChange} onChangeCommon={handleChangeCommon} />
 				</TabView>
 			</SettingsContext.Provider>
-			<Snackbar
-				open={Boolean(saved)}
-				autoHideDuration={10000}
-				onClose={handleCloseSnackBar}
-				type={saved || 'success'}
-				action={snackBarAction}
-			>
-				{TEST_SAVE_RESULTS[saved as keyof typeof TEST_SAVE_RESULTS]}
-			</Snackbar>
 		</Stack>
 	);
 };

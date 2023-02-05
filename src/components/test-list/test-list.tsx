@@ -1,87 +1,87 @@
-import React, { useState, useCallback, useMemo, memo } from 'react';
-import List from '@mui/material/List';
-
+import React, { useState, useCallback, useMemo } from 'react';
+import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 import TestListItem from '@/components/test-list-item';
 import Modal from '@/components/common/modal';
 
-import { TestItem } from '@/types';
+import { removeDocument } from '@/lib/front';
+import { useSnackbarContext } from '@/context/snackbar-context';
+import { DbCollections, TestItem } from '@/types/server';
+
+import styles from './styles.module.scss';
 
 interface Props {
 	testList: TestItem[];
 }
 
 /* TODO:
-	2. сделать сортировку вопросов с draggable - Завтра
+	2. сделать сортировку вопросов с draggable, перед этим проверить, что вопросы отправляются в том же порядке
 	14. Мемоизировать все, что нужно
-	15. Верхнее меню вынести в бургер даже в десктопе - Завтра
-	16. Войти и регистрация как в меню так и на главном экране со списоком тестов
-	18. Настроить eslint
-	21. Сделать client-side авторизацию
-	22. Сделать server-side авторизацию
 	23. Pwa
 	24. Добавить загрузку изображений к тестам
-	25. Добавить сообщения к тестам через firebase
 	firestore storage для файлов firebase
-	26. посмотреть как работает вход по email
-	27. В разделе тесты сделать мои и все сделать сортировку
 	28. Сделать страницу настроек
-	29. Убрать мигание в header
+	31. Защитить свои данные, когда буду катить в прод https://firebase.google.com/docs/firestore/security/overview?hl=ru
+
+	16. Войти и регистрация как в меню так и на главном экране со списоком тестов
+	26. посмотреть как работает вход по email
+	30. Добавить пагинацию для тестов
+	32. Вычислять результат при прохождении, если надо
+	27. В разделе тесты сделать мои и все сделать сортировку
+	35. Обработать вывод на экране тестов если пока нет тестов
 */
 
 const TestsList: React.FC<Props> = ({ testList = [] }) => {
+	const snackbarContext = useSnackbarContext();
+	const [tests, setTests] = useState(testList);
 	const [testIdToDelete, setTestToDelete] = useState<null | string>(null);
-	const [activeTest, setActiveTest] = useState<null | string>(null);
+	const [deleteLoading, setDeleteLoading] = useState(false);
 
 	const handleInitiateDelete = useCallback((id: string) => {
 		setTestToDelete(id);
 	}, []);
 
-	const handleAcceptDelete = () => {
-		// TODO: запрос на удаление из /api testIdToDelete
-
-		// TODO: сделать loading button в диалог
-
-		setTestToDelete(null); // если sucess
+	const handleAcceptDelete = async () => {
+		setDeleteLoading(true);
+		try {
+			await removeDocument(DbCollections.tests, testIdToDelete!);
+			snackbarContext.showSuccessSnackbar({
+				text: 'Тест успешно удален',
+			});
+			setTests((prevTests) => prevTests.filter((test) => test.id !== testIdToDelete));
+		} catch (e) {
+			snackbarContext.showErrorSnackbar({
+				text: 'Проиошла ошибка во время удаления теста, попробуйте еще раз',
+			});
+		} finally {
+			setDeleteLoading(false);
+			setTestToDelete(null);
+		}
 	};
 
 	const handleDeclineDelete = () => {
 		setTestToDelete(null);
 	};
 
-	const handleSelectTest = useCallback((id: string) => {
-		setActiveTest(id);
-	}, []);
-
-	const handleUnselectTest = useCallback(() => {
-		setActiveTest(null);
-	}, []);
-
 	const testToDeleteName = useMemo(() => {
-		const test = testList.find((t) => t.id === testIdToDelete);
+		const test = tests.find((t) => t.id === testIdToDelete);
 		return test?.name;
-	}, [testList, testIdToDelete]);
+	}, [tests, testIdToDelete]);
 
 	return (
-		<>
-			<List>
-				{testList.map((test) => (
-					<TestListItem
-						key={test.id}
-						testItem={test}
-						onDelete={handleInitiateDelete}
-						onClick={handleSelectTest}
-						onUnselect={handleUnselectTest}
-						active={activeTest === test.id}
-					/>
+		<div className={styles.testList}>
+			<Stack direction="row" flexWrap="wrap">
+				{tests.map((test) => (
+					<TestListItem key={test.id} testItem={test} onDelete={handleInitiateDelete} />
 				))}
-			</List>
+			</Stack>
 			<Modal
 				visible={Boolean(testIdToDelete)}
 				onAccept={handleAcceptDelete}
 				acceptButtonText="Удалить"
 				onDecline={handleDeclineDelete}
 				declineButtonText="Отмена"
+				acceptButtonDisabled={deleteLoading}
 			>
 				Вы действительно хотите удалить тест&nbsp;
 				<Typography fontWeight="bold" component="span">
@@ -89,8 +89,8 @@ const TestsList: React.FC<Props> = ({ testList = [] }) => {
 				</Typography>
 				?
 			</Modal>
-		</>
+		</div>
 	);
 };
 
-export default memo(TestsList);
+export default TestsList;

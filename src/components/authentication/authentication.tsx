@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { EmailAuthProvider, GoogleAuthProvider, PhoneAuthProvider } from 'firebase/auth';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
-import { auth } from '@/firebase/clientApp';
+import { auth } from '@/utils/firebase';
 
 const firebaseAuthConfig = {
 	signInFlow: 'popup',
@@ -44,7 +44,7 @@ const FirebaseAuth = () => {
 		}
 	}, []);
 
-	console.log(auth)
+	console.log(auth);
 
 	return (
 		<div>

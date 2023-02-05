@@ -5,7 +5,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { Result } from '@/types';
+import { Result } from '@/types/server';
 
 import styles from './styles.module.scss';
 

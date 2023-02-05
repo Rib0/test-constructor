@@ -2,21 +2,28 @@ import React from 'react';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MuiSelect, { SelectProps } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import MenuItem, { MenuItemProps } from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 
-interface Props {
-	onChange: (value: string) => void;
-	value: string;
+interface Props<T> {
+	onChange: (value: T) => void;
+	value: T;
 	label?: string;
 	helperText?: string;
-	options: { value: string; label: string }[];
+	options: { value: T; label: string }[];
 	disabled?: boolean;
 }
 
-const Select: React.FC<Props> = ({ onChange, value, label, helperText, options, disabled }) => {
+const Select = <T extends MenuItemProps['value']>({
+	onChange,
+	value,
+	label,
+	helperText,
+	options,
+	disabled,
+}: Props<T>) => {
 	const handleChange: SelectProps['onChange'] = (e) => {
-		onChange(e.target.value as string);
+		onChange(e.target.value as T);
 	};
 
 	return (
@@ -30,7 +37,7 @@ const Select: React.FC<Props> = ({ onChange, value, label, helperText, options, 
 				disabled={disabled}
 			>
 				{options.map((option) => (
-					<MenuItem key={option.value} value={option.value}>
+					<MenuItem key={option.label} value={option.value}>
 						{option.label}
 					</MenuItem>
 				))}

@@ -6,8 +6,10 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 import { roundScore } from './utils';
 
+import styles from './styles.module.scss';
+
 interface Props {
-	defaultScore?: string;
+	defaultScore?: number;
 	onStarClick?: (starIndex: number) => void;
 }
 
@@ -29,10 +31,10 @@ const StarsScore: React.FC<Props> = ({ defaultScore, onStarClick = () => {} }) =
 	};
 
 	const targetValue = activeIndex || hoveredIndex;
-	const disabled = Boolean(defaultScore);
+	const disabled = defaultScore !== undefined;
 
 	return (
-		<div onMouseLeave={handleMouseLeave}>
+		<div onMouseLeave={handleMouseLeave} className={styles.starsScore}>
 			{disabled &&
 				Array.from({ length: 5 }).map((i, index) =>
 					index + 1 <= targetValue ? (

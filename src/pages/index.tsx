@@ -1,29 +1,18 @@
 import 'firebase/firestore';
-import { getFirestore, doc } from 'firebase/firestore';
+import { doc, getFirestore, addDoc, collection } from 'firebase/firestore';
 import { useDocument } from 'react-firebase-hooks/firestore';
-import { withAuthUser } from 'next-firebase-auth';
 import type { NextPage } from 'next';
 
 import Typography from '@mui/material/Typography';
 
 import Link from '@/components/common/link';
 import { Paths } from '@/constants';
-import { firebaseApp } from '@/firebase/clientApp';
-import initAuth from '@/utils/initAuth';
+import { db, firebaseApp } from '@/utils/firebase';
 
 //TODO: сделать адаптивный размер шрифта и стилизовать через theme заголовки в typography
 //TODO: при введении url тестов без логина редиректить на страницу логина
 
-initAuth();
-
 const Home: NextPage = () => {
-	const [value, loading, error] = useDocument(
-		doc(getFirestore(firebaseApp), 'users', 'S0vWW8SoyLj460DTDJT3'),
-		{
-			snapshotListenOptions: { includeMetadataChanges: true },
-		}
-	);
-
 	return (
 		<div>
 			<Typography variant="body1">
@@ -44,4 +33,4 @@ const Home: NextPage = () => {
 	);
 };
 
-export default withAuthUser<{}>({})(Home);
+export default Home;

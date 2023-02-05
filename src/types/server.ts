@@ -1,7 +1,7 @@
 export interface Answer {
 	id: string;
 	text: string;
-	weight: string;
+	weight: number;
 	targetResult: string;
 }
 
@@ -16,24 +16,20 @@ export interface Result {
 	text: string;
 }
 
-// TestItem c сервера
 export interface TestItem {
 	id: string;
+	userId: string;
 	name: string;
 	showResult: boolean;
 	defaultResult: boolean;
+	isPrivate: boolean;
 	questions: Question[];
 	results: Result[];
-	score?: string;
-	passesAmount?: string;
+	score: number;
+	passesAmount: number;
 }
 
-export interface TestSettingsClient {
-	common: {
-		name: TestItem['name'];
-		showResult: TestItem['showResult'];
-		defaultResult: boolean;
-	};
-	questions: Question[];
-	results: Result[];
+export enum DbCollections {
+	tests = 'tests',
+	testsResults = 'testsResults',
 }

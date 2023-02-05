@@ -1,23 +1,13 @@
 import React from 'react';
-import { withAuthUserTokenSSR, withAuthUser, AuthAction } from 'next-firebase-auth';
-import {
-	NextPage,
-	GetStaticProps,
-	GetStaticPaths,
-	GetServerSideProps,
-	NextApiRequest,
-	NextApiResponse,
-} from 'next'; // TODO: для api роутов NextApiResponse<Data>
+import { withAuthUserTokenSSR, AuthAction, withAuthUser } from 'next-firebase-auth';
+import { NextPage } from 'next';
 import Typography from '@mui/material/Typography';
 
 import Authentication from '@/components/authentication';
-import initAuth from '@/utils/initAuth';
 
 import styles from './styles.module.scss';
 
 interface Props {}
-
-initAuth();
 
 const PageLogin: NextPage<Props> = () => {
 	return (

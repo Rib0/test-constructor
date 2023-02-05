@@ -11,11 +11,14 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 import Layout from '@/components/layout';
 import theme from '@/utils/theme';
 import createEmotionCache from '@/utils/createEmotionCache';
+import initAuth from '@/utils/initAuth';
 import { useNprogress } from '@/hooks';
 import { AuthProvider } from '@/context/auth-context';
+import { SnackbarProvider } from '@/context/snackbar-context';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
+initAuth();
 
 interface MyAppProps extends AppProps {
 	emotionCache?: EmotionCache;
@@ -31,10 +34,12 @@ function MyApp({ Component, pageProps, emotionCache = clientSideEmotionCache }: 
 			</Head>
 			<ThemeProvider theme={theme}>
 				<AuthProvider>
-					<Layout>
-						<CssBaseline />
-						<Component {...pageProps} />
-					</Layout>
+					<SnackbarProvider>
+						<Layout>
+							<CssBaseline />
+							<Component {...pageProps} />
+						</Layout>
+					</SnackbarProvider>
 				</AuthProvider>
 			</ThemeProvider>
 		</CacheProvider>

@@ -2,11 +2,21 @@ import React from 'react';
 import type { NextPage } from 'next';
 
 import TestList from '@/components/test-list';
+import { getSomeDocs } from '@/lib/node';
+import { DbCollections, TestItem } from '@/types/server';
 
-import mockedTestList from '@/mocks/tests';
+interface Props {
+	data: {
+		testList: TestItem[];
+	};
+}
 
-// TODO: тут сделать ssr
+const Tests: NextPage<Props> = ({ data: { testList } }) => <TestList testList={testList} />;
 
-const Tests: NextPage = () => <TestList testList={mockedTestList} />;
+export const getServerSideProps = async () => {
+	const data = await getSomeDocs(DbCollections.tests, ['isPrivate', '==', false]);
+
+	return { props: { data: { testList: data } } };
+};
 
 export default Tests;

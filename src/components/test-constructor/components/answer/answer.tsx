@@ -6,7 +6,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import cx from 'classnames';
 
 import EditButton from '@/components/common/edit-button';
-import { Answer } from '@/types';
+import { Answer } from '@/types/server';
 
 import styles from './styles.module.scss';
 

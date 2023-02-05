@@ -9,7 +9,7 @@ const Alert = React.forwardRef(function Alert(
 	return <MuiAlert elevation={6} ref={ref} {...props} />;
 });
 
-interface Props
+export interface Props
 	extends Pick<SnackbarProps, 'open' | 'autoHideDuration' | 'onClose'>,
 		Pick<AlertProps, 'action'> {
 	type: AlertProps['severity'];

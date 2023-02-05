@@ -1,4 +1,5 @@
-import { TestSettingsClient, TestItem } from '@/types';
+import { TestSettingsClient } from '@/types/client';
+import { TestItem } from '@/types/server';
 
 export type HandleChange = (
 	name: keyof TestSettingsClient,
@@ -14,25 +15,38 @@ export const DEFAULT_CLIENT_SETTINGS: TestSettingsClient = {
 		name: '',
 		showResult: false,
 		defaultResult: false,
+		isPrivate: false,
 	},
 	questions: [],
 	results: [],
+	score: 0,
+	passesAmount: 0,
 };
 
-export const mapServerTestSettingsData = (testItem?: TestItem): TestSettingsClient => {
+export const mapTestSettingsToClientData = (testItem?: TestItem): TestSettingsClient => {
 	if (!testItem) {
 		return DEFAULT_CLIENT_SETTINGS;
 	}
 
-	const { name, showResult, defaultResult, ...props } = testItem;
+	const { name, showResult, defaultResult, isPrivate, ...rest } = testItem;
 
 	return {
 		common: {
 			name,
 			showResult,
 			defaultResult,
+			isPrivate,
 		},
-		...props,
+		...rest,
+	};
+};
+
+export const mapTestSettingsToServerData = (testSettings: TestSettingsClient) => {
+	const { common, ...rest } = testSettings;
+
+	return {
+		...common,
+		...rest,
 	};
 };
 
@@ -52,8 +66,8 @@ export const validateTestSettings = (testSettings: TestSettingsClient) => {
 		return 'Добавьте хотя бы один вопрос';
 	}
 
-	if (questions.some((question) => !question.answers.length)) {
-		return 'К каждому вопросу добавьте хотя бы один вариант ответа';
+	if (questions.some((question) => question.answers.length < 2)) {
+		return 'К каждому вопросу добавьте хотя бы два варианта ответа';
 	}
 
 	if (common.showResult && !results.length) {

@@ -1,117 +1,107 @@
 import React, { memo } from 'react';
 import { useRouter } from 'next/router';
-import cx from 'classnames';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Button, { ButtonProps } from '@mui/material/Button';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import CardActionArea from '@mui/material/CardActionArea';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import PersonIcon from '@mui/icons-material/Person';
+import copy from 'copy-to-clipboard';
 
 import StarsScore from '@/components/stars-score';
 import { Paths } from '@/constants';
 import { insertPathParams } from '@/utils/router';
+import { useSnackbarContext } from '@/context/snackbar-context';
+import { useAuthContext } from '@/context/auth-context';
 
-import { TestItem } from '@/types';
+import { TestItem } from '@/types/server';
 
 import styles from './styles.module.scss';
 
 interface Props {
 	testItem: TestItem;
-	onClick: (id: string) => void;
 	onDelete: (id: string) => void;
-	onUnselect: VoidFunction;
-	active: boolean;
 }
 
-const TestListItem: React.FC<Props> = ({ testItem, onClick, onDelete, onUnselect, active }) => {
+const TestListItem: React.FC<Props> = ({ testItem, onDelete }) => {
+	const auth = useAuthContext();
+	const snackbarContext = useSnackbarContext();
 	const router = useRouter();
 
-	const handleClick = () => {
-		onClick(testItem.id);
-	};
-
-	const handleGoTestPage = () => {
+	const handleStartTest = () => {
 		router.push(insertPathParams(Paths.test, { id: testItem.id }));
 	};
 
-	const handleCancel: ButtonProps['onClick'] = (e) => {
-		e.stopPropagation();
-		onUnselect();
+	const handleCopyClick = () => {
+		const link = `${window.location.host}/tests/${testItem.id}`;
+		copy(link);
+		snackbarContext.showSuccessSnackbar({
+			text: 'Ссылка успешно скопирована',
+			autoHideDuration: 3000,
+		});
 	};
 
-	const handleEdit: IconButtonProps['onClick'] = (e) => {
-		e.stopPropagation();
+	const handleEditClick = () => {
 		router.push(insertPathParams(Paths.editTest, { id: testItem.id }));
 	};
 
-	const handleDelete: IconButtonProps['onClick'] = (e) => {
-		e.stopPropagation();
+	const handleDeleteClick = () => {
 		onDelete(testItem.id);
 	};
 
-	const getSecondaryAction = () => {
-		return (
-			<>
-				<IconButton size="large" onClick={handleEdit}>
-					<EditIcon />
-				</IconButton>
-				<IconButton size="large" onClick={handleDelete}>
-					<DeleteIcon />
-				</IconButton>
-			</>
-		);
-	};
-
-	const getSecondaryContent = () => (
-		<>
-			<div>Вопросов - {testItem.questions.length}</div>
-			<div className={styles.info}>
-				<StarsScore defaultScore={testItem.score} />
-				<div className={styles.passesAmount}>
-					<PersonIcon fontSize="small" />
-					{testItem.passesAmount}
-				</div>
-			</div>
-		</>
-	);
-
-	const listItemClassName = cx(styles.listItem, active && styles.active);
-
 	return (
-		<ListItem
-			key={testItem.id}
-			secondaryAction={getSecondaryAction()}
-			className={listItemClassName}
-			onClick={handleClick}
-			divider
-		>
-			<div className={styles.background}>
-				<Button
-					className={styles.button}
-					variant="outlined"
-					size="large"
-					onClick={handleGoTestPage}
-				>
-					Начать
-				</Button>
-				<Button variant="outlined" size="large" onClick={handleCancel}>
-					Отмена
-				</Button>
-			</div>
-			<ListItemIcon className={styles.listItemIcon}>
-				<PlayArrowIcon />
-			</ListItemIcon>
-			<ListItemText
-				primaryTypographyProps={{ className: styles.textPrimary }}
-				primary={testItem.name}
-				secondary={getSecondaryContent()}
-				secondaryTypographyProps={{ component: 'div' }}
-			/>
-		</ListItem>
+		<div className={styles.cardContainer}>
+			<Card className={styles.card}>
+				<CardActionArea onClick={handleStartTest}>
+					<CardMedia
+						component="img"
+						height="250"
+						image="https://via.placeholder.com/250x250?text=?"
+					/>
+					<CardContent>
+						<Typography gutterBottom variant="h4" component="div">
+							{testItem.name}
+						</Typography>
+						<Typography variant="body2" color="text.secondary">
+							<Stack spacing={0.5}>
+								<StarsScore defaultScore={testItem.score} />
+								<div className={styles.questionAmount}>
+									Вопросов - {testItem.questions.length}
+								</div>
+								<div className={styles.passesAmount}>
+									<PersonIcon className={styles.personIcon} fontSize="small" />
+									{testItem.passesAmount}
+								</div>
+							</Stack>
+						</Typography>
+					</CardContent>
+				</CardActionArea>
+				<CardActions>
+					<Tooltip title="Скопировать ссылку">
+						<IconButton onClick={handleCopyClick}>
+							<ContentCopyIcon />
+						</IconButton>
+					</Tooltip>
+					{auth?.id === testItem.userId && (
+						<>
+							<IconButton onClick={handleEditClick}>
+								<EditIcon />
+							</IconButton>
+							<IconButton onClick={handleDeleteClick}>
+								<DeleteIcon />
+							</IconButton>
+						</>
+					)}
+				</CardActions>
+			</Card>
+		</div>
 	);
 };
 
