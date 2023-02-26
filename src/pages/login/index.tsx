@@ -1,29 +1,24 @@
 import React from 'react';
 import { withAuthUserTokenSSR, AuthAction, withAuthUser } from 'next-firebase-auth';
-import { NextPage } from 'next';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import { NextPage } from 'next';
 
 import Authentication from '@/components/authentication';
 
-import styles from './styles.module.scss';
-
-interface Props {}
-
-const PageLogin: NextPage<Props> = () => {
-	return (
-		<div className={styles.container}>
-			<Typography className={styles.text}>
-				Войдите в личный кабинет удобным для вас способом, либо продолжите как гость
-			</Typography>
-			<Authentication />
-		</div>
-	);
-};
+const PageLogin: NextPage<{}> = () => (
+	<Stack spacing={2}>
+		<Typography align="center">
+			Войдите в личный кабинет удобным для вас способом, либо продолжите как гость
+		</Typography>
+		<Authentication />
+	</Stack>
+);
 
 export const getServerSideProps = withAuthUserTokenSSR({
 	whenAuthed: AuthAction.REDIRECT_TO_APP,
 })();
 
-export default withAuthUser<Props>({
+export default withAuthUser<{}>({
 	whenAuthed: AuthAction.REDIRECT_TO_APP,
 })(PageLogin);

@@ -1,0 +1,11 @@
+.listItem {
+	cursor: pointer;
+
+	&:hover {
+		font-weight: bold;
+	}
+
+	.textPrimary {
+		font-weight: bold;
+	}
+}

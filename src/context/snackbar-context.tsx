@@ -29,7 +29,7 @@ const SnackbarProvider: React.FC<PropsWithChildren> = ({ children }) => {
 		open: true,
 		onClose: () => handleChangeOptions({ open: false }),
 		action: undefined,
-		autoHideDuration: 1000,
+		autoHideDuration: 5000,
 	};
 
 	const showSuccessSnackbar = (options: Omit<SnackbarOptions, 'type' | 'open'>) => {

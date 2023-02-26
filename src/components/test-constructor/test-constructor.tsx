@@ -107,8 +107,6 @@ const TestConstructor: React.FC<Props> = ({ initialValues }) => {
 	const validationMessage = useMemo(() => validateTestSettings(testSettings), [testSettings]);
 	const isSaveButtonDisabled = Boolean(validationMessage) || saveLoading;
 
-	console.log(auth);
-
 	return (
 		<Stack direction="column" spacing={3}>
 			<Tabs value={visibleTab} onChange={handleChangeTab}>

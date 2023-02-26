@@ -1,11 +1,13 @@
 import { init } from 'next-firebase-auth';
 
+import { Paths } from '@/constants';
+
 const TWELVE_DAYS_IN_MS = 12 * 60 * 60 * 24 * 1000;
 
 const initAuth = () => {
 	return init({
-		authPageURL: '/login',
-		appPageURL: '/',
+		authPageURL: Paths.login,
+		appPageURL: Paths.tests,
 
 		loginAPIEndpoint: '/api/login',
 		logoutAPIEndpoint: '/api/logout',

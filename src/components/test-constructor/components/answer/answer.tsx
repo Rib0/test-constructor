@@ -13,11 +13,12 @@ import styles from './styles.module.scss';
 interface Props {
 	answer: Answer;
 	onEditAnswer: (answerId: string) => void;
-	onCancelEditAnswer: (initialAnswer: Answer) => void;
+	onCancelEditAnswer: VoidFunction;
 	onRemoveAnswer: (answerId: string) => void;
 	isEditing: boolean;
 	isEditingDisabled: boolean;
 	isSaveEditingDisabled: boolean;
+	needTargetResult: boolean;
 }
 
 const Answer: React.FC<Props> = ({
@@ -28,25 +29,26 @@ const Answer: React.FC<Props> = ({
 	isEditing,
 	isEditingDisabled,
 	isSaveEditingDisabled,
+	needTargetResult,
 }) => {
 	const handleEditAnswer = () => {
 		onEditAnswer(answer.id);
-	};
-
-	const handleCancelEditAnswer = () => {
-		onCancelEditAnswer(answer);
 	};
 
 	const handleRemoveAnswer = () => {
 		onRemoveAnswer(answer.id);
 	};
 
-	const answerClassName = cx(styles.answer, isEditing && styles.editing);
+	const answerClassName = cx(
+		styles.answer,
+		isEditing && styles.editing,
+		needTargetResult && styles.needTargetResult
+	);
 
 	return (
-		<div key={answer?.id} className={styles.answerContainer}>
+		<div key={answer.id} className={styles.answerContainer}>
 			<Paper elevation={5} className={answerClassName}>
-				<span className={styles.text}>{answer?.text}</span>
+				<span className={styles.text}>{answer.text}</span>
 				<div className={styles.actions}>
 					<EditButton
 						className={styles.button}
@@ -57,7 +59,7 @@ const Answer: React.FC<Props> = ({
 					<IconButton
 						className={styles.button}
 						disabled={!isEditing}
-						onClick={handleCancelEditAnswer}
+						onClick={onCancelEditAnswer}
 					>
 						<CancelIcon />
 					</IconButton>

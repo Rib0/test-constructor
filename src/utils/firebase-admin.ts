@@ -1,5 +1,4 @@
 import * as admin from 'firebase-admin';
-import { DbCollections } from '@/types/server';
 
 const createFirebaseAdminApp = () => {
 	if (!admin.apps.length) {

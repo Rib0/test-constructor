@@ -10,7 +10,7 @@ import { routes } from '@/constants';
 import styles from './styles.module.scss';
 
 const Layout: React.FC<PropsWithChildren> = ({ children }) => {
-	const { route: routeName } = useRouter();
+	const { route: routeName = '' } = useRouter();
 	const title = routes[routeName as keyof typeof routes]?.title;
 
 	return (

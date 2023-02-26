@@ -29,3 +29,9 @@
 		background-color: $color-green;
 	}
 }
+
+@mixin red-point-before {
+	@include point-before {
+		background-color: $color-red;
+	}
+}

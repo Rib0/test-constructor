@@ -44,7 +44,7 @@ const Results: React.FC<Props> = ({ onChange, onChangeCommon }) => {
 	const handleRemoveResult = (id: string) => {
 		onChange(
 			'results',
-			results.filter((result) => result?.id !== id)
+			results.filter((result) => result.id !== id)
 		);
 	};
 
@@ -100,6 +100,9 @@ const Results: React.FC<Props> = ({ onChange, onChangeCommon }) => {
 							onChange={handleChangeResultText}
 							value={resultText}
 							label="Введите название результата"
+							inputProps={{
+								maxLength: 70,
+							}}
 						/>
 					</Stack>
 				</>

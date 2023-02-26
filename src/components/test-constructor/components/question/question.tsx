@@ -38,7 +38,6 @@ const Question: React.FC<Props> = ({ question, onEditQuestion, onRemoveQuestion 
 
 	const handleEditQuestion: IconButtonProps['onClick'] = (e) => {
 		e.stopPropagation();
-
 		if (!isEditingQuestion) {
 			setEditingQuestion(true);
 			return;

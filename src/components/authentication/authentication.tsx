@@ -4,6 +4,7 @@ import { EmailAuthProvider, GoogleAuthProvider, PhoneAuthProvider } from 'fireba
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 import { auth } from '@/utils/firebase';
+import { Paths } from '@/constants';
 
 const firebaseAuthConfig = {
 	signInFlow: 'popup',
@@ -23,7 +24,7 @@ const firebaseAuthConfig = {
 			provider: GoogleAuthProvider.PROVIDER_ID,
 		},
 	],
-	signInSuccessUrl: '/',
+	signInSuccessUrl: Paths.tests,
 	credentialHelper: 'none',
 	callbacks: {
 		// https://github.com/firebase/firebaseui-web#signinsuccesswithauthresultauthresult-redirecturl
@@ -43,8 +44,6 @@ const FirebaseAuth = () => {
 			setRenderAuth(true);
 		}
 	}, []);
-
-	console.log(auth);
 
 	return (
 		<div>

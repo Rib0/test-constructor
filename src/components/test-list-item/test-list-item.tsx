@@ -13,6 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import PersonIcon from '@mui/icons-material/Person';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
 import copy from 'copy-to-clipboard';
 
 import StarsScore from '@/components/stars-score';
@@ -44,8 +45,11 @@ const TestListItem: React.FC<Props> = ({ testItem, onDelete }) => {
 		copy(link);
 		snackbarContext.showSuccessSnackbar({
 			text: 'Ссылка успешно скопирована',
-			autoHideDuration: 3000,
 		});
+	};
+
+	const handleCheckResultsClick = () => {
+		router.push(insertPathParams(Paths.testResults, { id: testItem.id }));
 	};
 
 	const handleEditClick = () => {
@@ -55,6 +59,8 @@ const TestListItem: React.FC<Props> = ({ testItem, onDelete }) => {
 	const handleDeleteClick = () => {
 		onDelete(testItem.id);
 	};
+
+	const defaultScore = +(testItem.scoreSum / testItem.scoreAmount).toFixed(1);
 
 	return (
 		<div className={styles.cardContainer}>
@@ -69,9 +75,9 @@ const TestListItem: React.FC<Props> = ({ testItem, onDelete }) => {
 						<Typography gutterBottom variant="h4" component="div">
 							{testItem.name}
 						</Typography>
-						<Typography variant="body2" color="text.secondary">
+						<Typography variant="body2" color="text.secondary" component="div">
 							<Stack spacing={0.5}>
-								<StarsScore defaultScore={testItem.score} />
+								<StarsScore defaultScore={defaultScore} />
 								<div className={styles.questionAmount}>
 									Вопросов - {testItem.questions.length}
 								</div>
@@ -91,6 +97,11 @@ const TestListItem: React.FC<Props> = ({ testItem, onDelete }) => {
 					</Tooltip>
 					{auth?.id === testItem.userId && (
 						<>
+							<Tooltip title="Результаты теста">
+								<IconButton onClick={handleCheckResultsClick}>
+									<FactCheckIcon />
+								</IconButton>
+							</Tooltip>
 							<IconButton onClick={handleEditClick}>
 								<EditIcon />
 							</IconButton>

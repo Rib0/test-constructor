@@ -1,11 +1,22 @@
-import { collection, doc, addDoc, updateDoc, deleteDoc, increment } from 'firebase/firestore';
+import {
+	collection,
+	doc,
+	addDoc,
+	setDoc,
+	updateDoc,
+	deleteDoc,
+	increment,
+} from 'firebase/firestore';
 
 import { db } from '@/utils/firebase';
 import { DbCollections, TestItem } from '@/types/server';
 
 export const addDocument = async (data: unknown, collectionName: DbCollections) => {
-	const result = await addDoc(collection(db, collectionName), data);
-	return result;
+	await addDoc(collection(db, collectionName), data);
+};
+
+export const setDocument = async (data: unknown, collectionName: DbCollections, docId: string) => {
+	await setDoc(doc(db, collectionName, docId), data);
 };
 
 export const editDocument = async (data: unknown, collectionName: DbCollections, docId: string) => {

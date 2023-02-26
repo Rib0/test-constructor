@@ -25,8 +25,18 @@ export interface TestItem {
 	isPrivate: boolean;
 	questions: Question[];
 	results: Result[];
-	score: number;
+	scoreAmount: number;
+	scoreSum: number;
 	passesAmount: number;
+}
+
+export interface TestResult {
+	id: string;
+	userName?: string | null;
+	userEmail?: string | null;
+	testName: string;
+	answers: Record<string, string>;
+	date: string;
 }
 
 export enum DbCollections {

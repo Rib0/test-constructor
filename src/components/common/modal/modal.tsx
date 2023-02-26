@@ -28,17 +28,34 @@ const Modal: React.FC<PropsWithChildren<Props>> = ({
 	acceptButtonDisabled,
 	children,
 }) => (
-	<MuiDialog open={visible} onClose={onDecline} transitionDuration={{ exit: 0, enter: 225 }}>
-		{title && <DialogTitle className={styles.title}>{title}</DialogTitle>}
-		<DialogContent>
-			<DialogContentText>{children}</DialogContentText>
-		</DialogContent>
-		<DialogActions>
-			<Button onClick={onAccept} disabled={acceptButtonDisabled} autoFocus>
-				{acceptButtonText}
-			</Button>
-			{onDecline && <Button onClick={onDecline}>{declineButtonText}</Button>}
-		</DialogActions>
+	<MuiDialog
+		fullWidth
+		open={visible}
+		onClose={onDecline}
+		transitionDuration={{ exit: 0, enter: 225 }}
+	>
+		<div className={styles.dialog}>
+			{title && <DialogTitle align="center">{title}</DialogTitle>}
+			<DialogContent>
+				<DialogContentText align="center">{children}</DialogContentText>
+			</DialogContent>
+			<DialogActions className={styles.actions}>
+				<Button
+					className={styles.button}
+					variant="contained"
+					onClick={onAccept}
+					disabled={acceptButtonDisabled}
+					autoFocus
+				>
+					{acceptButtonText}
+				</Button>
+				{onDecline && (
+					<Button className={styles.button} variant="outlined" onClick={onDecline}>
+						{declineButtonText}
+					</Button>
+				)}
+			</DialogActions>
+		</div>
 	</MuiDialog>
 );
 

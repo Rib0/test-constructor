@@ -35,5 +35,9 @@
 		&.editing {
 			@include orange-point-before;
 		}
+
+		&.needTargetResult {
+			@include red-point-before;
+		}
 	}
 }

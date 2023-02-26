@@ -12,6 +12,7 @@ interface Props<T> {
 	helperText?: string;
 	options: { value: T; label: string }[];
 	disabled?: boolean;
+	className?: string;
 }
 
 const Select = <T extends MenuItemProps['value']>({
@@ -21,6 +22,7 @@ const Select = <T extends MenuItemProps['value']>({
 	helperText,
 	options,
 	disabled,
+	className,
 }: Props<T>) => {
 	const handleChange: SelectProps['onChange'] = (e) => {
 		onChange(e.target.value as T);
@@ -30,6 +32,7 @@ const Select = <T extends MenuItemProps['value']>({
 		<FormControl size="small">
 			{label && <InputLabel id={`select-${label}`}>{label}</InputLabel>}
 			<MuiSelect
+				className={className}
 				labelId={`select-${label}`}
 				value={value}
 				label={label}

@@ -1,8 +1,7 @@
 import { firebaseAdminApp } from '@/utils/firebase-admin';
 import { DbCollections } from '@/types/server';
-import { ConditionType } from '@/types/client';
 
-const db = firebaseAdminApp?.firestore();
+export const db = firebaseAdminApp?.firestore();
 
 export const getDoc = async (collectionName: DbCollections, docId: string) => {
 	const docRef = db?.collection(collectionName).doc(docId);
@@ -23,12 +22,10 @@ export const getDocs = async (collectionName: DbCollections) => {
 	return data;
 };
 
-export const getSomeDocs = async (collectionName: DbCollections, condition: ConditionType) => {
-	const collection = await db
-		?.collection(collectionName)
-		.where(...condition)
-		.get();
-	const data = collection?.docs?.map((doc) => ({ ...doc.data(), id: doc.id }));
+export const getDocsCount = async (collectionName: DbCollections) => {
+	const collection = db?.collection(collectionName);
+	const snapshot = await collection?.count().get();
+	const data = snapshot?.data().count;
 
 	return data;
 };

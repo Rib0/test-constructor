@@ -17,12 +17,8 @@ const StarsScore: React.FC<Props> = ({ defaultScore, onStarClick = () => {} }) =
 	const [hoveredIndex, setHoveredIndex] = useState(0);
 	const [activeIndex, setActiveIndex] = useState(() => roundScore(defaultScore));
 
-	const handleMouseEnter = (index: number) => () => {
+	const handleChangeHoveredIndex = (index: number) => () => {
 		setHoveredIndex(index);
-	};
-
-	const handleMouseLeave = () => {
-		setHoveredIndex(0);
 	};
 
 	const handleClick = () => {
@@ -34,7 +30,7 @@ const StarsScore: React.FC<Props> = ({ defaultScore, onStarClick = () => {} }) =
 	const disabled = defaultScore !== undefined;
 
 	return (
-		<div onMouseLeave={handleMouseLeave} className={styles.starsScore}>
+		<div onMouseLeave={handleChangeHoveredIndex(0)} className={styles.starsScore}>
 			{disabled &&
 				Array.from({ length: 5 }).map((i, index) =>
 					index + 1 <= targetValue ? (
@@ -51,7 +47,7 @@ const StarsScore: React.FC<Props> = ({ defaultScore, onStarClick = () => {} }) =
 						color="warning"
 						size="large"
 						onClick={handleClick}
-						onMouseEnter={handleMouseEnter(index + 1)}
+						onMouseEnter={handleChangeHoveredIndex(index + 1)}
 						key={index}
 					>
 						{index + 1 <= targetValue ? <StarIcon /> : <StarBorderIcon />}

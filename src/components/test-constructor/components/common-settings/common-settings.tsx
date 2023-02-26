@@ -22,18 +22,11 @@ const CommonSettings: React.FC<Props> = ({ onChange }) => {
 		onChange(name as 'name', value);
 	};
 
-	const handleChangeShowResult: CheckboxProps['onChange'] = (e) => {
+	const handleChangeCheckboxValue: CheckboxProps['onChange'] = (e) => {
 		const {
 			target: { name, checked },
 		} = e;
-		onChange(name as 'showResult', checked);
-	};
-
-	const handleChangeIsPrivate: CheckboxProps['onChange'] = (e) => {
-		const {
-			target: { name, checked },
-		} = e;
-		onChange(name as 'isPrivate', checked);
+		onChange(name as 'showResult' | 'isPrivate', checked);
 	};
 
 	return (
@@ -44,17 +37,20 @@ const CommonSettings: React.FC<Props> = ({ onChange }) => {
 				name="name"
 				value={common.name}
 				label="Название теста"
+				inputProps={{
+					maxLength: 60,
+				}}
 			/>
 			<Checkbox
 				checked={common.showResult}
-				onChange={handleChangeShowResult}
+				onChange={handleChangeCheckboxValue}
 				name="showResult"
 				label="Показывать результат"
 				helperText="Показывать результат теста после его прохождения"
 			/>
 			<Checkbox
 				checked={common.isPrivate}
-				onChange={handleChangeIsPrivate}
+				onChange={handleChangeCheckboxValue}
 				name="isPrivate"
 				label="Доступен только по ссылке"
 				helperText="Тест не будет показываться в общем списке тестов"

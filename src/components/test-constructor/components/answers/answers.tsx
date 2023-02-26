@@ -37,14 +37,14 @@ const Answers: React.FC<Props> = ({ onEditQuestion, question }) => {
 	const [answerTargetResult, setAnswerTargetResult] = useState(results[0]?.id || '');
 
 	useEffect(() => {
-		const editingAnswer = question.answers.find((answer) => answer.id === editingAnswerId);
+		const editingAnswer = question.answers.find((answer) => answer.id === editingAnswerId)!;
 		const defaultTargetResult = results[0]?.id || '';
 
-		setAnswerText(editingAnswerId ? editingAnswer?.text || '' : '');
-		setAnswerWeight(editingAnswerId ? editingAnswer?.weight || DEFAULT_WEIGHT : DEFAULT_WEIGHT);
+		setAnswerText(editingAnswerId ? editingAnswer.text || '' : '');
+		setAnswerWeight(editingAnswerId ? editingAnswer.weight || DEFAULT_WEIGHT : DEFAULT_WEIGHT);
 		setAnswerTargetResult(
 			editingAnswerId
-				? editingAnswer?.targetResult || defaultTargetResult
+				? editingAnswer.targetResult || defaultTargetResult
 				: defaultTargetResult
 		);
 	}, [editingAnswerId, question.answers, results]);
@@ -95,9 +95,7 @@ const Answers: React.FC<Props> = ({ onEditQuestion, question }) => {
 		handleSaveAnswer();
 	};
 
-	const handleCancelEditAnswer = ({ text, weight }: AnswerType) => {
-		setAnswerText(text);
-		setAnswerWeight(weight);
+	const handleCancelEditAnswer = () => {
 		setEditingAnswerId(null);
 	};
 
@@ -113,7 +111,7 @@ const Answers: React.FC<Props> = ({ onEditQuestion, question }) => {
 	};
 
 	const resultsOptions = useMemo(() => mapResultsToOptions(results), [results]);
-	const controlsDisabled = question.answers?.length === 4 && !editingAnswerId;
+	const controlsDisabled = question.answers.length === 4 && !editingAnswerId;
 
 	return (
 		<>
@@ -133,6 +131,7 @@ const Answers: React.FC<Props> = ({ onEditQuestion, question }) => {
 							{common.showResult && (
 								<Stack direction="row" spacing={2} className={styles.addActions}>
 									<Select
+										disabled={common.defaultResult}
 										onChange={handleChangeAnswerWeight}
 										value={answerWeight}
 										label="Вес"
@@ -140,12 +139,13 @@ const Answers: React.FC<Props> = ({ onEditQuestion, question }) => {
 										options={WEIGHT_OPTIONS}
 									/>
 									<Select
+										className={styles.select}
+										disabled={!resultsOptions.length}
 										onChange={handleChangeAnswerTargetResult}
 										value={answerTargetResult}
 										label="Результат"
 										helperText="Выберите результат теста"
 										options={resultsOptions}
-										disabled={!resultsOptions.length}
 									/>
 								</Stack>
 							)}
@@ -171,7 +171,7 @@ const Answers: React.FC<Props> = ({ onEditQuestion, question }) => {
 					</Stack>
 					<div>
 						<Stack className={styles.answers} direction="row" flexWrap="wrap">
-							{question.answers?.map((answer) => (
+							{question.answers.map((answer) => (
 								<Answer
 									key={answer.id}
 									answer={answer}
@@ -183,6 +183,10 @@ const Answers: React.FC<Props> = ({ onEditQuestion, question }) => {
 										!!editingAnswerId && editingAnswerId !== answer.id
 									}
 									isSaveEditingDisabled={!answerText.length}
+									needTargetResult={
+										!results.find((r) => r.id === answer.targetResult) &&
+										common.showResult
+									}
 								/>
 							))}
 						</Stack>

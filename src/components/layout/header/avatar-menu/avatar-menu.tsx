@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
-import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 import Menu, { Props } from '@/components/common/menu';
@@ -25,11 +24,6 @@ const AvatarMenu: React.FC = () => {
 
 	const menuItems = useMemo<Props['items']>(
 		() => [
-			{
-				label: 'Настройки',
-				icon: SettingsIcon,
-				path: Paths.settings,
-			},
 			{
 				label: 'Выйти',
 				icon: LogoutIcon,

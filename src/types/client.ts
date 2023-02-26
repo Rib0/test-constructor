@@ -11,8 +11,7 @@ export interface TestSettingsClient {
 	};
 	questions: Question[];
 	results: Result[];
-	score: number;
+	scoreAmount: number;
+	scoreSum: number;
 	passesAmount: number;
 }
-
-export type ConditionType = [string, '==' | '>' | '<' | '>=' | '<=', string | number | boolean];

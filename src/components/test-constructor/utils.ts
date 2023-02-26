@@ -19,7 +19,8 @@ export const DEFAULT_CLIENT_SETTINGS: TestSettingsClient = {
 	},
 	questions: [],
 	results: [],
-	score: 0,
+	scoreAmount: 0,
+	scoreSum: 0,
 	passesAmount: 0,
 };
 
@@ -47,6 +48,7 @@ export const mapTestSettingsToServerData = (testSettings: TestSettingsClient) =>
 	return {
 		...common,
 		...rest,
+		questionsAmount: rest.questions.length,
 	};
 };
 
@@ -57,6 +59,19 @@ export const TEST_SAVE_RESULTS = {
 
 export const validateTestSettings = (testSettings: TestSettingsClient) => {
 	const { common, questions, results } = testSettings;
+
+	if (
+		common.showResult &&
+		questions.some((question) =>
+			question.answers.some(
+				(answer) =>
+					!answer.targetResult ||
+					!results.find((result) => result.id === answer.targetResult)
+			)
+		)
+	) {
+		return 'Укажите "Результат" для каждого варианта ответа во всех вопросах';
+	}
 
 	if (!common.name) {
 		return 'Ввведите название теста';
@@ -72,12 +87,5 @@ export const validateTestSettings = (testSettings: TestSettingsClient) => {
 
 	if (common.showResult && !results.length) {
 		return 'Добавьте хотя бы один результат теста';
-	}
-
-	if (
-		common.showResult &&
-		questions.some((question) => question.answers.some((answer) => !answer.targetResult))
-	) {
-		return 'Укажите "Результат" для каждого варианта ответа во всех вопросах';
 	}
 };
