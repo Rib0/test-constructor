@@ -1,6 +1,6 @@
 /* globals window */
 import React, { useEffect, useState } from 'react';
-import { EmailAuthProvider, GoogleAuthProvider, PhoneAuthProvider } from 'firebase/auth';
+import { EmailAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 import { auth } from '@/utils/firebase';

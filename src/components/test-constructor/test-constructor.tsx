@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import Tabs, { TabsProps } from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Button from '@mui/material/Button';
@@ -16,13 +16,13 @@ import TabView from '@/components/common/tab-view';
 import CommonSettings from './components/common-settings';
 import Questions from './components/questions';
 import Results from './components/results';
-import { mapTestSettingsToServerData } from '@/components/test-constructor/utils';
 import {
 	HandleChange,
 	HandleChangeCommon,
 	mapTestSettingsToClientData,
 	TEST_SAVE_RESULTS,
 	validateTestSettings,
+	mapTestSettingsToServerData,
 } from './utils';
 import { addDocument, editDocument } from '@/lib/front';
 import { TestSettingsClient } from '@/types/client';
@@ -45,16 +45,19 @@ const TestConstructor: React.FC<Props> = ({ initialValues }) => {
 		setVisibleTab(value);
 	};
 
-	const handleChange: HandleChange = (name, value) => {
+	const handleChange: HandleChange = useCallback((name, value) => {
 		setTestSettings((prevSettings) => ({
 			...prevSettings,
 			[name]: value,
 		}));
-	};
+	}, []);
 
-	const handleChangeCommon: HandleChangeCommon = (name, value) => {
-		handleChange('common', { ...testSettings.common, [name]: value });
-	};
+	const handleChangeCommon: HandleChangeCommon = useCallback(
+		(name, value) => {
+			handleChange('common', { ...testSettings.common, [name]: value });
+		},
+		[handleChange, testSettings.common]
+	);
 
 	const handleResetSettings = () => {
 		const isEdit = Boolean(initialValues);

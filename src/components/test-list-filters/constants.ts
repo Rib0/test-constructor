@@ -1,10 +1,10 @@
 export const OWNERS_OPTIONS = [
 	{
-		label: 'Все',
+		label: 'Все (кроме приватных)',
 		value: 1,
 	},
 	{
-		label: 'Мои',
+		label: 'Мои (включая приватные)',
 		value: 2,
 	},
 ];

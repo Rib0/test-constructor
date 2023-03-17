@@ -5,8 +5,8 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { useAuthContext } from '@/context/auth-context';
 import Select from '@/components/common/select';
+import { useAuthContext } from '@/context/auth-context';
 import { OWNERS_OPTIONS, DEFAULT_OWNER_VALUE, SORT_OPTIONS, DEFAULT_SORT_VALUE } from './constants';
 import type { GetTestsDataFType } from '@/lib/front/tests';
 
@@ -37,8 +37,10 @@ const TestListFilters: React.FC<PropsWithChildren<Props>> = ({
 	});
 
 	const handleFindTests = () => {
-		prevRequestSnapshot.current = { name, owner, sortValue };
-		onRequest(name, owner, sortValue, auth?.id as string | undefined);
+		try {
+			onRequest(name, owner, sortValue, auth?.id as string | undefined);
+			prevRequestSnapshot.current = { name, owner, sortValue };
+		} catch (e) {}
 	};
 
 	const handleChangeOwner = (value: number) => {
@@ -55,7 +57,9 @@ const TestListFilters: React.FC<PropsWithChildren<Props>> = ({
 
 	const handleShowMoreClick = () => {
 		const { name, owner, sortValue } = prevRequestSnapshot.current;
-		onRequest(name, owner, sortValue, auth?.id as string | undefined, lastTestId);
+		try {
+			onRequest(name, owner, sortValue, auth?.id as string | undefined, lastTestId);
+		} catch (e) {}
 	};
 
 	const ownersOptions = auth?.id ? OWNERS_OPTIONS : [OWNERS_OPTIONS[0]];
@@ -63,7 +67,7 @@ const TestListFilters: React.FC<PropsWithChildren<Props>> = ({
 	return (
 		<Stack spacing={2}>
 			<Stack spacing={2}>
-				<Stack direction="row" spacing={2} alignItems="flex-start">
+				<Stack direction="row" spacing={2} alignItems="stretch">
 					<Button
 						disabled={loading}
 						onClick={handleFindTests}

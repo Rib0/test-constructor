@@ -5,6 +5,7 @@ export interface TestSettingsClient {
 	userId?: string;
 	common: {
 		name: TestItem['name'];
+		description: TestItem['description'];
 		showResult: TestItem['showResult'];
 		defaultResult: boolean;
 		isPrivate: boolean;

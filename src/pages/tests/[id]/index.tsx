@@ -22,7 +22,7 @@ const TestProcess: NextPage<Props> = ({ data: { testItem } }) => (
 );
 
 export const getServerSideProps = async ({ params }: Params) => {
-	const data = await getDoc(DbCollections.tests, params?.id);
+	const data = await getDoc(DbCollections.tests, params.id);
 
 	return { props: { data: { testItem: data } } };
 };

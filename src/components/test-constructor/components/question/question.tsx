@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
@@ -95,4 +95,4 @@ const Question: React.FC<Props> = ({ question, onEditQuestion, onRemoveQuestion 
 	);
 };
 
-export default Question;
+export default memo(Question);

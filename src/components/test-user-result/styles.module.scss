@@ -1,0 +1,10 @@
+@import '@/styles/mixins';
+
+.score {
+	display: flex;
+	align-items: center;
+}
+
+.textPrimary {
+	font-weight: bold;
+}

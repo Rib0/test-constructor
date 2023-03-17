@@ -14,6 +14,7 @@ import Result from '../result';
 import { HandleChange, HandleChangeCommon } from '@/components/test-constructor/utils';
 import Checkbox from '@/components/common/checkbox';
 import { useSettingsContext } from '@/context/settings-context';
+import { useCallback } from 'react';
 
 interface Props {
 	onChange: HandleChange;
@@ -41,12 +42,15 @@ const Results: React.FC<Props> = ({ onChange, onChangeCommon }) => {
 		handleClearResultText();
 	};
 
-	const handleRemoveResult = (id: string) => {
-		onChange(
-			'results',
-			results.filter((result) => result.id !== id)
-		);
-	};
+	const handleRemoveResult = useCallback(
+		(id: string) => {
+			onChange(
+				'results',
+				results.filter((result) => result.id !== id)
+			);
+		},
+		[onChange, results]
+	);
 
 	const handleChangeCommonResult: CheckboxProps['onChange'] = (e) => {
 		const {

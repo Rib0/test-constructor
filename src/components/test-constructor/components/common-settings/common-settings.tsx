@@ -19,7 +19,7 @@ const CommonSettings: React.FC<Props> = ({ onChange }) => {
 		const {
 			target: { name, value },
 		} = e;
-		onChange(name as 'name', value);
+		onChange(name as 'name' | 'description', value);
 	};
 
 	const handleChangeCheckboxValue: CheckboxProps['onChange'] = (e) => {
@@ -39,6 +39,18 @@ const CommonSettings: React.FC<Props> = ({ onChange }) => {
 				label="Название теста"
 				inputProps={{
 					maxLength: 60,
+				}}
+			/>
+			<TextField
+				fullWidth
+				onChange={handleChangeTextField}
+				name="description"
+				value={common.description}
+				label="Описание теста"
+				multiline
+				rows={4}
+				inputProps={{
+					maxLength: 300,
 				}}
 			/>
 			<Checkbox

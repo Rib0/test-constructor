@@ -7,18 +7,20 @@ import Button from '@mui/material/Button';
 import StarsScore from '@/components/stars-score';
 import Loader from '@/components/common/loader';
 import { useSnackbarContext } from '@/context/snackbar-context';
-import { incrementDocValue } from '@/lib/front';
+import { saveScore, editResults } from '@/lib/front/tests';
+import { getQuestionEnding } from './utils';
 import { Paths } from '@/constants';
-import { DbCollections, TestItem } from '@/types/server';
+import { TestItem, TestResultAnswers } from '@/types/server';
 
 import styles from './styles.module.scss';
 
 interface Props {
+	id: string;
 	test: TestItem;
-	answers: Record<string, string>;
+	answers: TestResultAnswers;
 }
 
-const RankTest: React.FC<Props> = ({ test, answers }) => {
+const RankTest: React.FC<Props> = ({ id, test, answers }) => {
 	const snackbarContext = useSnackbarContext();
 	const router = useRouter();
 	const [result, setResult] = useState('');
@@ -29,7 +31,7 @@ const RankTest: React.FC<Props> = ({ test, answers }) => {
 
 		const results = Object.entries(answers).reduce<
 			Record<string, { weight: number; amount: number }>
-		>((acc, [questionId, answerId]) => {
+		>((acc, [questionId, { id: answerId }]) => {
 			const question = test.questions.find((question) => question.id === questionId);
 			const answer = question?.answers.find((answer) => answer.id === answerId);
 
@@ -42,12 +44,16 @@ const RankTest: React.FC<Props> = ({ test, answers }) => {
 			};
 		}, {});
 
+		let resultText;
+
 		if (test.defaultResult) {
 			const rightResult = test.results.find((r) => r.text.toLowerCase() === 'верный ответ');
 			const rightResultInfo = results[rightResult?.id!];
-			setResult(
-				`Вы ответили верно на ${rightResultInfo.amount} из ${test.questions.length} вопросов`
-			);
+			resultText = `Вы ответили верно на ${rightResultInfo.amount} из ${
+				test.questions.length
+			} ${getQuestionEnding(test.questions.length)}`;
+			editResults(id, { resultText });
+			setResult(resultText);
 
 			return;
 		}
@@ -56,10 +62,11 @@ const RankTest: React.FC<Props> = ({ test, answers }) => {
 		const [maxResultId] = Object.entries(results).find(
 			([key, { weight }]) => weight === maxWeight
 		)!;
-		const result = test.results.find((result) => result.id === maxResultId);
+		resultText = test.results.find((result) => result.id === maxResultId)?.text || '';
+		editResults(id, { resultText });
 
-		setResult(result?.text!);
-	}, [test, answers]);
+		setResult(resultText);
+	}, [test, answers, id]);
 
 	const handleStarClick = (score: number) => {
 		setScore(score);
@@ -68,8 +75,7 @@ const RankTest: React.FC<Props> = ({ test, answers }) => {
 	const handleFinish = async () => {
 		if (score) {
 			try {
-				await incrementDocValue(DbCollections.tests, test.id, 'scoreAmount');
-				await incrementDocValue(DbCollections.tests, test.id, 'scoreSum', score);
+				await saveScore(test.id, id, score);
 			} catch (e) {
 				snackbarContext.showErrorSnackbar({
 					text: 'Произошла ошибка во время отправки вашей оценки, попробуйте еще раз',

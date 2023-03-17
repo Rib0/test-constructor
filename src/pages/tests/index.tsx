@@ -16,6 +16,7 @@ const Tests: NextPage<Props> = ({ data }) => <TestList {...data} />;
 
 export const getServerSideProps = async () => {
 	const data = await getTestsData();
+
 	return { props: { data: data } };
 };
 

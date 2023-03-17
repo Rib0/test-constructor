@@ -13,6 +13,7 @@ export type HandleChangeCommon = (
 export const DEFAULT_CLIENT_SETTINGS: TestSettingsClient = {
 	common: {
 		name: '',
+		description: '',
 		showResult: false,
 		defaultResult: false,
 		isPrivate: false,
@@ -29,11 +30,12 @@ export const mapTestSettingsToClientData = (testItem?: TestItem): TestSettingsCl
 		return DEFAULT_CLIENT_SETTINGS;
 	}
 
-	const { name, showResult, defaultResult, isPrivate, ...rest } = testItem;
+	const { name, description, showResult, defaultResult, isPrivate, ...rest } = testItem;
 
 	return {
 		common: {
 			name,
+			description,
 			showResult,
 			defaultResult,
 			isPrivate,

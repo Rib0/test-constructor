@@ -28,15 +28,28 @@ export interface TestItem {
 	scoreAmount: number;
 	scoreSum: number;
 	passesAmount: number;
+	description: string;
+}
+
+export interface TestResultAnswers {
+	[key: string]: {
+		id: string;
+		text: string;
+		questionText: string;
+	};
 }
 
 export interface TestResult {
 	id: string;
-	userName?: string | null;
-	userEmail?: string | null;
+	testId: string;
+	userName: string | null;
+	userEmail: string | null;
 	testName: string;
-	answers: Record<string, string>;
+	answers: TestResultAnswers;
 	date: string;
+	testOwnerId: string;
+	resultText: string;
+	score: number;
 }
 
 export enum DbCollections {

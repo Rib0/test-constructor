@@ -6,7 +6,7 @@ import { NextPage } from 'next';
 
 import Authentication from '@/components/authentication';
 
-const PageLogin: NextPage<{}> = () => (
+const PageLogin: NextPage = () => (
 	<Stack spacing={2}>
 		<Typography align="center">
 			Войдите в личный кабинет удобным для вас способом, либо продолжите как гость

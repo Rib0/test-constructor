@@ -1,4 +1,5 @@
 import React from 'react';
+import { AuthAction, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import type { NextPage } from 'next';
 
 import TestConstructor from '@/components/test-constructor';
@@ -11,20 +12,18 @@ interface Props {
 	};
 }
 
-interface Params {
-	params: {
-		id: string;
-	};
-}
-
 const EditTest: NextPage<Props> = ({ data: { testItem } }) => (
 	<TestConstructor initialValues={testItem} />
 );
 
-export const getServerSideProps = async ({ params }: Params) => {
-	const data = await getDoc(DbCollections.tests, params?.id);
+export const getServerSideProps = withAuthUserTokenSSR({
+	whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})(async ({ params }) => {
+	const data = await getDoc(DbCollections.tests, params?.id as string);
 
 	return { props: { data: { testItem: data } } };
-};
+});
 
-export default EditTest;
+export default withAuthUser<Props>({
+	whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+})(EditTest);

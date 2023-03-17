@@ -8,11 +8,11 @@ import cx from 'classnames';
 
 import TestResults from '@/components/test-results';
 import Modal from '@/components/common/modal';
-import { setDocument, incrementDocValue } from '@/lib/front';
 import { useSnackbarContext } from '@/context/snackbar-context';
 import { useAuthContext } from '@/context/auth-context';
 import { formatDate } from '@/utils/date';
-import { DbCollections, TestItem, TestResult } from '@/types/server';
+import { saveResults } from '@/lib/front/tests';
+import { TestItem, TestResult, TestResultAnswers } from '@/types/server';
 
 import styles from './styles.module.scss';
 
@@ -25,10 +25,11 @@ const TestProcess: React.FC<Props> = ({ test }) => {
 
 	const snackbarContext = useSnackbarContext();
 	const [questionIndex, setQuestionIndex] = useState(0);
-	const [answers, setAnswers] = useState<Record<string, string>>({});
+	const [answers, setAnswers] = useState<TestResultAnswers>({});
 	const [loading, setLoading] = useState(false);
 	const [userName, setUserName] = useState('');
 	const [userNameModalVisible, setUserNameModalVisible] = useState(false);
+	const [testResultId, setTestResultId] = useState('');
 
 	const { name, questions } = test;
 	const currentQuestion = questions[questionIndex];
@@ -42,9 +43,13 @@ const TestProcess: React.FC<Props> = ({ test }) => {
 		}
 
 		const activeAnswerId = e.target.dataset.id!;
-		const { id: questionId } = currentQuestion;
+		const { id: questionId, text: questionText, answers: answersOptions } = currentQuestion;
+		const answerText = answersOptions.find(({ id }) => id === activeAnswerId)?.text || '';
 
-		setAnswers({ ...answers, [questionId]: activeAnswerId });
+		setAnswers({
+			...answers,
+			[questionId]: { id: activeAnswerId, text: answerText, questionText },
+		});
 	};
 
 	const handleGoPrevQuestion = () => {
@@ -54,22 +59,22 @@ const TestProcess: React.FC<Props> = ({ test }) => {
 	const sendTestResults = async () => {
 		setLoading(true);
 		try {
-			const result: Omit<TestResult, 'id'> = {
-				userName: userName || auth?.displayName,
-				userEmail: auth?.email,
+			const result: Partial<TestResult> = {
+				testId: test.id,
+				userName: userName || auth?.displayName || '',
+				userEmail: auth?.email || '',
 				testName: test.name,
 				answers,
 				date: formatDate(new Date()),
+				testOwnerId: test.userId,
 			};
-			await Promise.all([
-				setDocument(result, DbCollections.testsResults, test.id),
-				incrementDocValue(DbCollections.tests, test.id, 'passesAmount'),
-			]);
+			const id = await saveResults(test.id, result);
+			setTestResultId(id);
 		} catch (e) {
 			snackbarContext.showErrorSnackbar({
 				text: 'Произошла ошибка во время сохранения результатов, попробуйте еще раз',
 			});
-			throw new Error(e.message);
+			throw e;
 		} finally {
 			setLoading(false);
 		}
@@ -101,7 +106,7 @@ const TestProcess: React.FC<Props> = ({ test }) => {
 		setUserNameModalVisible(false);
 	};
 
-	if (!currentQuestion) return <TestResults test={test} answers={answers} />;
+	if (!currentQuestion) return <TestResults test={test} answers={answers} id={testResultId} />;
 
 	return (
 		<Stack className={styles.root} spacing={3}>
@@ -121,10 +126,10 @@ const TestProcess: React.FC<Props> = ({ test }) => {
 							<Paper
 								onClick={handleSetActiveAnswer}
 								data-id={answer.id}
-								elevation={answer.id === activeAnswer ? 5 : 9}
+								elevation={answer.id === activeAnswer?.id ? 5 : 9}
 								className={cx(
 									styles.answer,
-									answer.id === activeAnswer && styles.active
+									answer.id === activeAnswer?.id && styles.active
 								)}
 							>
 								<span className={styles.text}>{answer.text}</span>

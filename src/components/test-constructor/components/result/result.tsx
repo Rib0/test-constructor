@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -20,6 +20,8 @@ const Result: React.FC<Props> = ({ result, onRemoveResult, removeDisabled }) => 
 		onRemoveResult(result.id);
 	};
 
+	console.log('render');
+
 	return (
 		<ListItem
 			divider
@@ -37,4 +39,4 @@ const Result: React.FC<Props> = ({ result, onRemoveResult, removeDisabled }) => 
 	);
 };
 
-export default Result;
+export default memo(Result);

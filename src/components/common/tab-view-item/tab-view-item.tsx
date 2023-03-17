@@ -12,4 +12,4 @@ const TabViewItem: React.FC<PropsWithChildren<Props>> = ({ children, visible }) 
 	return <div className={className}>{children}</div>;
 };
 
-export default memo(TabViewItem);
+export default TabViewItem;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
@@ -35,21 +35,27 @@ const Questions: React.FC<Props> = ({ onChange }) => {
 		handleClearQuestionText();
 	};
 
-	const handleRemoveQuestion = (id: string) => {
-		onChange(
-			'questions',
-			questions.filter((question) => question.id !== id)
-		);
-	};
+	const handleRemoveQuestion = useCallback(
+		(id: string) => {
+			onChange(
+				'questions',
+				questions.filter((question) => question.id !== id)
+			);
+		},
+		[questions, onChange]
+	);
 
-	const handleEditQuestion = (id: string, editedQuestion: QuestionType) => {
-		onChange(
-			'questions',
-			questions.map((question) =>
-				question.id === id ? { ...question, ...editedQuestion } : question
-			)
-		);
-	};
+	const handleEditQuestion = useCallback(
+		(id: string, editedQuestion: QuestionType) => {
+			onChange(
+				'questions',
+				questions.map((question) =>
+					question.id === id ? { ...question, ...editedQuestion } : question
+				)
+			);
+		},
+		[questions, onChange]
+	);
 
 	return (
 		<Stack spacing={2}>
