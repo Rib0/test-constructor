@@ -19,10 +19,7 @@ interface Props {
 
 /* TODO:
 	2. Защитить свои данные, когда буду катить в прод https://firebase.google.com/docs/firestore/security/overview?hl=ru
-	3. сделать сортировку вопросов с draggable, перед этим проверить, что вопросы отправляются в том же порядке
 	4. Добавить загрузку изображений к тестам
-	5. Войти и регистрация как в меню так и на главном экране со списоком тестов
-	6. Добавить страницу информации
 	7. caching с помощью headers
 	firestore storage для файлов firebase
 	https://nextjs.org/docs/api-reference/next/image#remote-patterns

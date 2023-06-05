@@ -1,6 +1,5 @@
 import TextSnipper from '@mui/icons-material/TextSnippet';
 import Add from '@mui/icons-material/Add';
-import Info from '@mui/icons-material/Info';
 
 export enum Paths {
 	login = '/login',
@@ -9,7 +8,6 @@ export enum Paths {
 	editTest = '/tests/edit/[id]',
 	createTest = '/tests/create',
 	testResults = '/tests/[id]/results',
-	info = '/info',
 }
 
 export const routes = {
@@ -33,13 +31,7 @@ export const routes = {
 		icon: Add,
 		label: 'Создать тест',
 	},
-	[Paths.info]: {
-		title: 'Информация',
-		path: Paths.info,
-		icon: Info,
-		label: 'Информация',
-	},
 };
 
-export const navigationPages = [routes[Paths.tests], routes[Paths.createTest], routes[Paths.info]];
-export const navigationPagesNoAuth = [routes[Paths.tests], routes[Paths.info]];
+export const navigationPages = [routes[Paths.tests], routes[Paths.createTest]];
+export const navigationPagesNoAuth = [routes[Paths.tests]];

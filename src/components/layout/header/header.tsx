@@ -1,43 +1,35 @@
 import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import Box from '@mui/material/Box';
 
-import Link from '@/components/common/link';
+import BurgerMenu from './burger-menu';
 import AvatarMenu from './avatar-menu';
-import { useAuthContext } from '@/context/auth-context';
-import { navigationPages, navigationPagesNoAuth } from '@/constants';
+import Link from '@/components/common/link';
+import { useGetNavigationPages } from '@/hooks';
 
 import styles from './styles.module.scss';
 
-// TODO: сделать адаптив
 // TODO: сделать загрузку изображений на сервер (на какой?) с использованием layout: fill
 // TODO: загружать изображения в https://github.com/leerob/nextjs-gcp-storage
-// TODO: добавить сюда nav для меню, мб из material-ui
-// Добавить расстояние между ссылками
 
 const Header: React.FC = () => {
-	const auth = useAuthContext();
-
-	const currentNavigationPages = auth?.id ? navigationPages : navigationPagesNoAuth;
+	const navigationPages = useGetNavigationPages();
 
 	return (
 		<AppBar position="static">
 			<Toolbar>
-				<div className={styles.menu}>
-					<IconButton className={styles.icon}>
-						<MenuIcon fontSize="large" />
-					</IconButton>
-				</div>
-				<div className={styles.pages}>
-					{currentNavigationPages.map(({ label, path, icon: Icon }) => (
+				<Box className={styles.menu} sx={{ display: { md: 'none' } }}>
+					<BurgerMenu />
+				</Box>
+				<Box sx={{ display: { xs: 'none', md: 'flex' } }} className={styles.pages}>
+					{navigationPages.map(({ label, path, icon: Icon }) => (
 						<Link key={path} color="inherit" href={path}>
 							<Icon className={styles.icon} />
 							<div>{label}</div>
 						</Link>
 					))}
-				</div>
+				</Box>
 				<AvatarMenu />
 			</Toolbar>
 		</AppBar>

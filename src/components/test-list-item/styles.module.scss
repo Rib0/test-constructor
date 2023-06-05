@@ -1,46 +1,41 @@
 @import '@/styles/vars';
 
-.cardContainer {
-	flex: 0 0 33%;
-	padding: 0 10px;
+.card {
+	position: relative;
+	margin-bottom: 20px;
 
-	.card {
-		position: relative;
-		margin-bottom: 20px;
+	.hidden {
+		opacity: 0;
+	}
 
-		.hidden {
-			opacity: 0;
+	.defaultView,
+	.info {
+		transition: opacity 0.3s;
+	}
+
+	.info {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+	}
+
+	.questionAmount {
+		margin-left: 3px;
+	}
+
+	.passesAmount,
+	.score {
+		display: flex;
+		align-items: center;
+
+		.icon {
+			margin-right: -3px;
 		}
+	}
 
-		.defaultView,
-		.info {
-			transition: opacity 0.3s;
-		}
-
-		.info {
-			position: absolute;
-			top: 0;
-			left: 0;
-			bottom: 0;
-			right: 0;
-		}
-
-		.questionAmount {
-			margin-left: 3px;
-		}
-
-		.passesAmount,
-		.score {
-			display: flex;
-			align-items: center;
-
-			.icon {
-				margin-right: -3px;
-			}
-		}
-
-		.commonActions {
-			flex-grow: 1;
-		}
+	.commonActions {
+		flex-grow: 1;
 	}
 }

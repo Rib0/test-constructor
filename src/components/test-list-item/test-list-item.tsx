@@ -1,5 +1,6 @@
 import React, { useState, memo } from 'react';
 import { useRouter } from 'next/router';
+import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -74,7 +75,9 @@ const TestListItem: React.FC<Props> = ({ testItem, onDelete }) => {
 	const infoClassName = cx(styles.info, !isInfoVisible && styles.hidden);
 
 	return (
-		<div className={styles.cardContainer}>
+		<Box
+			sx={{ flex: { xs: '0 0 100%', sm: '0 0 50%', md: '0 0 33.33333%' }, padding: '0 10px' }}
+		>
 			<Card raised className={styles.card}>
 				<CardActionArea onClick={handleStartTest}>
 					<div className={defaultViewClassName}>
@@ -150,7 +153,7 @@ const TestListItem: React.FC<Props> = ({ testItem, onDelete }) => {
 					)}
 				</CardActions>
 			</Card>
-		</div>
+		</Box>
 	);
 };
 

@@ -3,9 +3,11 @@
 }
 
 .pages {
+	padding-left: 50px;
 	flex-grow: 1;
+	justify-content: center;
+}
 
-	.icon {
-		margin-right: 5px;
-	}
+.icon {
+	margin-right: 5px;
 }

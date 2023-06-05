@@ -1,4 +1,12 @@
-import React, { createContext, PropsWithChildren, useContext, useState } from 'react';
+import React, {
+	createContext,
+	PropsWithChildren,
+	useContext,
+	useState,
+	useMemo,
+	useCallback,
+	useRef,
+} from 'react';
 import Snackbar, { Props } from '@/components/common/snackbar';
 
 interface SnackbarOptions extends Partial<Props> {
@@ -21,39 +29,52 @@ const useSnackbarContext = () => useContext(SnackbarContext);
 const SnackbarProvider: React.FC<PropsWithChildren> = ({ children }) => {
 	const [snackbarOptions, setSnackbarOptions] = useState<SnackbarOptions>({});
 
-	const handleChangeOptions = (options: SnackbarOptions) => {
+	const handleChangeOptions = useCallback((options: SnackbarOptions) => {
 		setSnackbarOptions((prevOptions) => ({ ...prevOptions, ...options }));
-	};
+	}, []);
 
-	const defaultOptions = {
+	const defaultOptionsRef = useRef({
 		open: true,
 		onClose: () => handleChangeOptions({ open: false }),
 		action: undefined,
 		autoHideDuration: 5000,
-	};
+	});
 
-	const showSuccessSnackbar = (options: Omit<SnackbarOptions, 'type' | 'open'>) => {
-		handleChangeOptions({
-			type: 'success',
-			...defaultOptions,
-			...options,
-		});
-	};
+	const showSuccessSnackbar = useCallback(
+		(options: Omit<SnackbarOptions, 'type' | 'open'>) => {
+			handleChangeOptions({
+				type: 'success',
+				...defaultOptionsRef.current,
+				...options,
+			});
+		},
+		[defaultOptionsRef.current]
+	);
 
-	const showErrorSnackbar = (options: Omit<SnackbarOptions, 'type' | 'open'>) => {
-		handleChangeOptions({
-			type: 'error',
-			...defaultOptions,
-			...options,
-		});
-	};
+	const showErrorSnackbar = useCallback(
+		(options: Omit<SnackbarOptions, 'type' | 'open'>) => {
+			handleChangeOptions({
+				type: 'error',
+				...defaultOptionsRef.current,
+				...options,
+			});
+		},
+		[defaultOptionsRef.current]
+	);
+
+	const value = useMemo(
+		() => ({
+			handleChange: handleChangeOptions,
+			showSuccessSnackbar,
+			showErrorSnackbar,
+		}),
+		[handleChangeOptions, showSuccessSnackbar, showErrorSnackbar]
+	);
 
 	const { text, type = 'success', ...restOptions } = snackbarOptions;
 
 	return (
-		<SnackbarContext.Provider
-			value={{ handleChange: handleChangeOptions, showSuccessSnackbar, showErrorSnackbar }}
-		>
+		<SnackbarContext.Provider value={value}>
 			<Snackbar type={type} {...restOptions}>
 				{text}
 			</Snackbar>

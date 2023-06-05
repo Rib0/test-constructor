@@ -67,15 +67,7 @@ const TestListFilters: React.FC<PropsWithChildren<Props>> = ({
 	return (
 		<Stack spacing={2}>
 			<Stack spacing={2}>
-				<Stack direction="row" spacing={2} alignItems="stretch">
-					<Button
-						disabled={loading}
-						onClick={handleFindTests}
-						variant="contained"
-						startIcon={<SearchIcon />}
-					>
-						Найти
-					</Button>
+				<Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="stretch">
 					<Select
 						className={styles.ownerSelect}
 						onChange={handleChangeOwner}
@@ -90,6 +82,14 @@ const TestListFilters: React.FC<PropsWithChildren<Props>> = ({
 						label="Показать сначала:"
 						options={SORT_OPTIONS}
 					/>
+					<Button
+						disabled={loading}
+						onClick={handleFindTests}
+						variant="contained"
+						startIcon={<SearchIcon />}
+					>
+						Найти
+					</Button>
 				</Stack>
 				<TextField
 					fullWidth
