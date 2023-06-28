@@ -7,6 +7,7 @@ import { CheckboxProps } from '@mui/material/Checkbox';
 import { HandleChangeCommon } from '@/components/test-constructor/utils';
 import Checkbox from '@/components/common/checkbox';
 import { useSettingsContext } from '@/context/settings-context';
+import UploadFileButton from './upload-file-button';
 
 interface Props {
 	onChange: HandleChangeCommon;
@@ -29,8 +30,13 @@ const CommonSettings: React.FC<Props> = ({ onChange }) => {
 		onChange(name as 'showResult' | 'isPrivate', checked);
 	};
 
+	const handleImageUpload = (url: string) => {
+		onChange('imageUrl', url);
+	};
+
 	return (
 		<Stack spacing={2}>
+			<UploadFileButton imageUrl={common.imageUrl} onImageUpload={handleImageUpload} />
 			<TextField
 				fullWidth
 				onChange={handleChangeTextField}

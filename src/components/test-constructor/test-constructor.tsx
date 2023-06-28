@@ -112,7 +112,13 @@ const TestConstructor: React.FC<Props> = ({ initialValues }) => {
 
 	return (
 		<Stack direction="column" spacing={3}>
-			<Tabs value={visibleTab} onChange={handleChangeTab}>
+			<Tabs
+				variant="scrollable"
+				scrollButtons
+				allowScrollButtonsMobile
+				value={visibleTab}
+				onChange={handleChangeTab}
+			>
 				<Tab label="Общие настройки" />
 				<Tab label="Список вопросов" />
 				{testSettings.common.showResult && <Tab label="Результаты теста" />}

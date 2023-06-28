@@ -9,6 +9,7 @@ export interface TestSettingsClient {
 		showResult: TestItem['showResult'];
 		defaultResult: boolean;
 		isPrivate: boolean;
+		imageUrl: TestItem['imageUrl'];
 	};
 	questions: Question[];
 	results: Result[];

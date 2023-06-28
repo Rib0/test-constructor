@@ -10,15 +10,17 @@ import { useGetNavigationPages } from '@/hooks';
 
 import styles from './styles.module.scss';
 
-// TODO: сделать загрузку изображений на сервер (на какой?) с использованием layout: fill
-// TODO: загружать изображения в https://github.com/leerob/nextjs-gcp-storage
-
 const Header: React.FC = () => {
 	const navigationPages = useGetNavigationPages();
 
 	return (
-		<AppBar position="static">
-			<Toolbar>
+		<AppBar className={styles.header} position="static">
+			<Toolbar
+				sx={{
+					paddingLeft: { xs: '6px', sm: '12px', md: '24px' },
+					paddingRight: { xs: '6px', sm: '12px', md: '24px' },
+				}}
+			>
 				<Box className={styles.menu} sx={{ display: { md: 'none' } }}>
 					<BurgerMenu />
 				</Box>

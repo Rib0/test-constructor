@@ -29,6 +29,7 @@ export interface TestItem {
 	scoreSum: number;
 	passesAmount: number;
 	description: string;
+	imageUrl?: string;
 }
 
 export interface TestResultAnswers {

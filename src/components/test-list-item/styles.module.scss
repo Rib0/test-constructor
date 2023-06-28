@@ -13,6 +13,11 @@
 		transition: opacity 0.3s;
 	}
 
+	.cardContent {
+		padding-top: 0;
+		padding-bottom: 10px;
+	}
+
 	.info {
 		position: absolute;
 		top: 0;

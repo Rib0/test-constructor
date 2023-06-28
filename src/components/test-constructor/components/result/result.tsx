@@ -20,8 +20,6 @@ const Result: React.FC<Props> = ({ result, onRemoveResult, removeDisabled }) => 
 		onRemoveResult(result.id);
 	};
 
-	console.log('render');
-
 	return (
 		<ListItem
 			divider

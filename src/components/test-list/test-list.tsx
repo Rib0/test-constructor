@@ -17,15 +17,6 @@ interface Props {
 	testsCount: number;
 }
 
-/* TODO:
-	2. Защитить свои данные, когда буду катить в прод https://firebase.google.com/docs/firestore/security/overview?hl=ru
-	4. Добавить загрузку изображений к тестам
-	7. caching с помощью headers
-	firestore storage для файлов firebase
-	https://nextjs.org/docs/api-reference/next/image#remote-patterns
-	https://firebase.google.com/docs/firestore/solutions/role-based-access?hl=ru
-*/
-
 const TestsList: React.FC<Props> = ({ testList = [], testsCount }) => {
 	const snackbarContext = useSnackbarContext();
 	const [loading, setLoading] = useState(false);

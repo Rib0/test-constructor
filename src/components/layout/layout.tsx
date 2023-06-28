@@ -2,6 +2,7 @@ import React, { PropsWithChildren } from 'react';
 import { useRouter } from 'next/router';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 import Header from './header';
 
@@ -16,14 +17,20 @@ const Layout: React.FC<PropsWithChildren> = ({ children }) => {
 	return (
 		<Container className={styles.container} disableGutters maxWidth="lg">
 			<Header />
-			<main className={styles.main}>
+			<Box
+				sx={{
+					paddingLeft: { xs: 0, sm: '12px', md: '24px' },
+					paddingRight: { xs: 0, sm: '12px', md: '24px' },
+				}}
+				className={styles.main}
+			>
 				{title && (
 					<Typography className={styles.title} variant="h1">
 						{title}
 					</Typography>
 				)}
 				<Container className={styles.innerContainer}>{children}</Container>
-			</main>
+			</Box>
 		</Container>
 	);
 };

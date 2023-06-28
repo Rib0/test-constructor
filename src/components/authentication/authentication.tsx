@@ -15,7 +15,7 @@ const firebaseAuthConfig = {
 			provider: EmailAuthProvider.PROVIDER_ID,
 			requireDisplayName: false,
 		},
-		// { пока не поправят
+		// { пока не работает
 		// 	provider: PhoneAuthProvider.PROVIDER_ID,
 		// 	defaultCountry: 'RU',
 		// 	whitelistedCountries: ['RU', 'KZ', 'UA', 'BY'],

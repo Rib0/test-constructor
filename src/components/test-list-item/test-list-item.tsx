@@ -84,9 +84,12 @@ const TestListItem: React.FC<Props> = ({ testItem, onDelete }) => {
 						<CardMedia
 							component="img"
 							height="250"
-							image="https://placehold.co/250x250/gray/FFF?text=?"
+							image={
+								testItem.imageUrl || 'https://placehold.co/250x250/gray/FFF?text=?'
+							}
+							sx={{ objectFit: 'contain' }}
 						/>
-						<CardContent>
+						<CardContent className={styles.cardContent}>
 							<VisibilityOffIcon
 								className={testItem.isPrivate ? undefined : styles.hidden}
 							/>

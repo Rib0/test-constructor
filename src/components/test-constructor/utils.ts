@@ -17,6 +17,7 @@ export const DEFAULT_CLIENT_SETTINGS: TestSettingsClient = {
 		showResult: false,
 		defaultResult: false,
 		isPrivate: false,
+		imageUrl: '',
 	},
 	questions: [],
 	results: [],
@@ -30,7 +31,15 @@ export const mapTestSettingsToClientData = (testItem?: TestItem): TestSettingsCl
 		return DEFAULT_CLIENT_SETTINGS;
 	}
 
-	const { name, description, showResult, defaultResult, isPrivate, ...rest } = testItem;
+	const {
+		name,
+		description = '',
+		showResult,
+		defaultResult,
+		isPrivate,
+		imageUrl,
+		...rest
+	} = testItem;
 
 	return {
 		common: {
@@ -39,6 +48,7 @@ export const mapTestSettingsToClientData = (testItem?: TestItem): TestSettingsCl
 			showResult,
 			defaultResult,
 			isPrivate,
+			imageUrl,
 		},
 		...rest,
 	};

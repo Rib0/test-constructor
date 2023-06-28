@@ -48,7 +48,7 @@ const SnackbarProvider: React.FC<PropsWithChildren> = ({ children }) => {
 				...options,
 			});
 		},
-		[defaultOptionsRef.current]
+		[handleChangeOptions, defaultOptionsRef.current]
 	);
 
 	const showErrorSnackbar = useCallback(
@@ -59,7 +59,7 @@ const SnackbarProvider: React.FC<PropsWithChildren> = ({ children }) => {
 				...options,
 			});
 		},
-		[defaultOptionsRef.current]
+		[handleChangeOptions, defaultOptionsRef.current]
 	);
 
 	const value = useMemo(
