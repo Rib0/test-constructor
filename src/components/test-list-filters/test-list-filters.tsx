@@ -109,6 +109,7 @@ const TestListFilters: React.FC<PropsWithChildren<Props>> = ({
 						variant="contained"
 						startIcon={<ExpandMoreIcon />}
 						onClick={handleShowMoreClick}
+						data-test-id="load-more-tests"
 					>
 						Показать еще
 					</Button>

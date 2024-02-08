@@ -99,6 +99,7 @@ const TestUsersResults: React.FC<Props> = ({ testResultsList, testResultsCount, 
 						variant="contained"
 						startIcon={<ExpandMoreIcon />}
 						onClick={handleShowMoreClick}
+						data-test-id="load-more-results"
 					>
 						Показать еще
 					</Button>

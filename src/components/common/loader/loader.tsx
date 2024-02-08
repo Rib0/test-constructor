@@ -12,7 +12,7 @@ const Loader: React.FC<Props> = ({ noBg }) => {
 			sx={{ bgcolor: (theme) => (noBg ? '' : theme.palette.background.default) }}
 			open={true}
 		>
-			<CircularProgress color="primary" size={100} />
+			<CircularProgress color="primary" size={100} data-test-id="page-loader" />
 		</Backdrop>
 	);
 };

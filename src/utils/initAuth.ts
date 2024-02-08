@@ -29,13 +29,13 @@ const initAuth = () => {
 		cookies: {
 			name: 'TestConstructor',
 			keys: [process.env.COOKIE_SECRET_CURRENT, process.env.COOKIE_SECRET_PREVIOUS],
-			httpOnly: true,
+			httpOnly: false,
 			maxAge: TWELVE_DAYS_IN_MS,
 			overwrite: true,
 			path: '/',
 			sameSite: 'lax',
 			secure: false,
-			signed: true,
+			signed: false,
 		},
 	});
 };

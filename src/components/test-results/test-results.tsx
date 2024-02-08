@@ -60,7 +60,7 @@ const RankTest: React.FC<Props> = ({ id, test, answers }) => {
 
 		const maxWeight = Math.max(...Object.values(results).map((r) => r.weight));
 		const [maxResultId] = Object.entries(results).find(
-			([key, { weight }]) => weight === maxWeight
+			([, { weight }]) => weight === maxWeight
 		)!;
 		resultText = test.results.find((result) => result.id === maxResultId)?.text || '';
 		editResults(id, { resultText });

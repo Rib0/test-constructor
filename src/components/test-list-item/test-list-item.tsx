@@ -77,6 +77,7 @@ const TestListItem: React.FC<Props> = ({ testItem, onDelete }) => {
 	return (
 		<Box
 			sx={{ flex: { xs: '0 0 100%', sm: '0 0 50%', md: '0 0 33.33333%' }, padding: '0 10px' }}
+			data-test-id="test-list-item"
 		>
 			<Card raised className={styles.card}>
 				<CardActionArea onClick={handleStartTest}>
@@ -127,13 +128,16 @@ const TestListItem: React.FC<Props> = ({ testItem, onDelete }) => {
 				<CardActions>
 					<div className={styles.commonActions}>
 						<Tooltip title="Скопировать ссылку">
-							<IconButton onClick={handleCopyClick}>
+							<IconButton onClick={handleCopyClick} data-test-id="copy-link-button">
 								<ContentCopyIcon />
 							</IconButton>
 						</Tooltip>
 						{testItem.description && (
 							<Tooltip title="Описание теста">
-								<IconButton onClick={handleToggleInfo}>
+								<IconButton
+									onClick={handleToggleInfo}
+									data-test-id="test-description"
+								>
 									<InfoIcon />
 								</IconButton>
 							</Tooltip>

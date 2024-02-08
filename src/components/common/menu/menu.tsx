@@ -14,6 +14,7 @@ export interface Props extends MenuProps {
 		path?: string;
 		onClick?: VoidFunction;
 		icon: typeof SvgIcon;
+		dataTestId?: string;
 	}[];
 }
 
@@ -22,10 +23,17 @@ const Menu: React.FC<Props> = (props) => {
 
 	return (
 		<MuiMenu {...muiMenuProps}>
-			{items.map(({ label, icon: Icon, path, onClick }) => {
+			{items.map(({ label, icon: Icon, path, onClick, dataTestId }) => {
 				if (path) {
 					return (
-						<Link type="link" noStyles passHref href={path} key={label}>
+						<Link
+							type="link"
+							noStyles
+							passHref
+							href={path}
+							key={label}
+							data-test-id={dataTestId}
+						>
 							<MenuItem>
 								<ListItemIcon>
 									<Icon className={styles.icon} fontSize="small" />
@@ -37,7 +45,7 @@ const Menu: React.FC<Props> = (props) => {
 				}
 
 				return (
-					<MenuItem onClick={onClick} key={label}>
+					<MenuItem onClick={onClick} key={label} data-test-id={dataTestId}>
 						<ListItemIcon>
 							<Icon className={styles.icon} fontSize="small" />
 							{label}

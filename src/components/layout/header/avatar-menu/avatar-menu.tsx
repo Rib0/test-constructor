@@ -28,6 +28,7 @@ const AvatarMenu: React.FC = () => {
 				label: 'Выйти',
 				icon: LogoutIcon,
 				onClick: auth?.signOut,
+				dataTestId: 'logout-button',
 			},
 		],
 		[auth]
@@ -37,7 +38,7 @@ const AvatarMenu: React.FC = () => {
 		<>
 			{auth?.id ? (
 				<>
-					<IconButton onClick={handleClick} size="small">
+					<IconButton onClick={handleClick} size="small" data-test-id="user-menu-button">
 						<Avatar className={styles.avatar} />
 					</IconButton>
 					<Menu
@@ -49,7 +50,7 @@ const AvatarMenu: React.FC = () => {
 					/>
 				</>
 			) : (
-				<Link type="button" href={Paths.login}>
+				<Link type="button" href={Paths.login} data-test-id="login-button">
 					Войти
 				</Link>
 			)}
